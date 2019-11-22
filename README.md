@@ -15,8 +15,21 @@ tarefas administrativas.
 | --------- | --------- | --------- | --------- |
 | IE11, Edge| last 2 versions| last 2 versions| last 2 versions
 
+## Software de controlo de versões
+
+Utilizamos o [Sourcetree](https://www.sourcetreeapp.com/) para o controlo de versões.
+
+## Construido com
+
+* [Vue.js](https://vuejs.org/v2/guide/) - JavaScript Framework
+* [NuxtJs](https://nuxtjs.org/) - Vue.js Framework
+* [IntelliJ IDEA Ultimate](https://www.jetbrains.com/idea/) - Java IDE from Jetbrains
+* [PhpStorm](https://www.jetbrains.com/phpstorm/) - PHP IDE from Jetbrains
+* [Java EE](https://www.oracle.com/java/technologies/java-ee-glance.html) - Java EE
+* [Java SDK (v8)](https://www.java.com/en/) - Java SDK
+
 ## Autores
 
-2170738 - Andrés Toledi
-2170786 - Kevin Merizalde
-2171264 - Pedro Moleiro
+* **2170738 - Andrés Toledo**
+* **2170786 - Kevin Merizalde**
+* **2171264 - Pedro Moleiro**
