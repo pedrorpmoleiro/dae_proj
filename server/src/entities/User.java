@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name="USERS")
-
 public abstract class User {
     @Id
     private String username;
