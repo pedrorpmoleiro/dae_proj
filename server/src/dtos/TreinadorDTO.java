@@ -3,16 +3,16 @@ package dtos;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-public class AdministradorDTO implements Serializable {
+public class TreinadorDTO implements Serializable {
     @Id
     private long idSocio;
     private String password;
     private String name;
     private String email;
-    public AdministradorDTO() {
+    public TreinadorDTO() {
     }
 
-    public AdministradorDTO(long idSocio, String password, String name, String email) {
+    public TreinadorDTO(long idSocio, String password, String name, String email) {
         this.idSocio = idSocio;
         this.password = password;
         this.name = name;

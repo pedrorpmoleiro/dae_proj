@@ -1,6 +1,8 @@
 package ejbs;
 
 import entities.Administrador;
+import exceptions.MyEntityExistsException;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -17,34 +19,34 @@ public class AdministradorBean {
     @PersistenceContext
     EntityManager em;
 
-    public void create(String username, String password, String name, String email) {
+    public void create(long idSocio, String password, String name, String email)throws MyEntityExistsException{
 
         try {
-            Administrador administrador = em.find(Administrador.class, username);
+            Administrador administrador = em.find(Administrador.class, idSocio);
             if (administrador == null) {
-                    administrador = new Administrador(username, password, name, email);
+                    administrador = new Administrador(idSocio, password, name, email);
                     em.persist(administrador);
                 } else {
-                System.out.println("Ese username ya esta siendo utilizado");
+                throw new MyEntityExistsException("Invalid Username: Username in use");
             }
         }catch (Exception e){
             System.out.println("Server error");
         }
     }
 
-    public void update(String username, String password, String name, String email){
-        Administrador administrador = em.find(Administrador.class, username);
+    public void update(long idSocio, String password, String name, String email) throws MyEntityNotFoundException{
+        Administrador administrador = em.find(Administrador.class, idSocio);
         if (administrador != null) {
             em.lock(administrador, LockModeType.OPTIMISTIC);
 
-                administrador.setUsername(username);
+                administrador.setIdSocio(idSocio);
                 administrador.setPassword(password);
                 administrador.setName(name);
                 administrador.setEmail(email);
 
                 em.persist(administrador);
         }else{
-            System.out.println("No existe ese Estudante");
+            throw new MyEntityNotFoundException("Admin not found");
         }
     }
 
@@ -54,16 +56,16 @@ public class AdministradorBean {
             return (List<Administrador>)
                     em.createNamedQuery("getAllAdministradores").getResultList();
         } catch (Exception e) {
-            throw new EJBException("ERROR_RETRIEVING_STUDENTS", e);
+            throw new EJBException("ERROR_RETRIEVING_ADMIN", e);
         }
 
     }
 
-    public Administrador findAdministrador(String username) {
+    public Administrador findAdministrador(String idSocio) {
         try {
-            return em.find(Administrador.class, username);
+            return em.find(Administrador.class, idSocio);
         } catch (Exception e) {
-            throw new EJBException("ERROR_FINDING_STUDENT", e);
+            throw new EJBException("ERROR_FINDING_ADMIN", e);
         }
     }
 }

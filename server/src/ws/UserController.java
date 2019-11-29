@@ -3,6 +3,7 @@ package ws;
 import dtos.AdministradorDTO;
 import ejbs.AdministradorBean;
 import entities.Administrador;
+import exceptions.MyEntityExistsException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -21,7 +22,7 @@ public class UserController {
     // Converts an entity to a DTO class
     AdministradorDTO toDTO(Administrador administrador) {
         return new AdministradorDTO(
-                administrador.getUsername(),
+                administrador.getIdSocio(),
                 administrador.getPassword(),
                 administrador.getName(),
                 administrador.getEmail()
@@ -41,9 +42,9 @@ public class UserController {
 
     @POST
     @Path("/administradores")
-    public Response createNewAdministrador(AdministradorDTO administradorDTO) {
+    public Response createNewAdministrador(AdministradorDTO administradorDTO) throws MyEntityExistsException {
         administradorBean.create(
-                administradorDTO.getUsername(),
+                administradorDTO.getIdSocio(),
                 administradorDTO.getPassword(),
                 administradorDTO.getName(),
                 administradorDTO.getEmail());
