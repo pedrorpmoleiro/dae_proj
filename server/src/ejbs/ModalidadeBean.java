@@ -2,6 +2,7 @@ package ejbs;
 
 import entities.Modalidade;
 import entities.ModalidadeType;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -37,7 +38,7 @@ public class ModalidadeBean {
         }
 
     }
-    public Modalidade findStudent(String name) throws MyEntityNotFoundException{
+    public Modalidade findStudent(String name) throws MyEntityNotFoundException {
         try{
             Modalidade modalidade= em.find(Modalidade.class, name);
             if(modalidade==null){

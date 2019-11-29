@@ -3,6 +3,8 @@ package ws;
 import dtos.ModalidadeDTO;
 import ejbs.ModalidadeBean;
 import entities.Modalidade;
+import exceptions.MyEntityExistsException;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
