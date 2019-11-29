@@ -1,36 +1,39 @@
 package entities;
 
-import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
-public class Modalidade {
-    private List<Socio> socios;
-    private List<Treinador> treinadores;
+@NamedQueries(value = {
+        @NamedQuery(
+                name = "getAllModalidades",
+                query = "SELECT s FROM Modalidade s ORDER BY s.nome" // JPQL
+        )
+})
+public class Modalidade implements Serializable {
+   // private List<Socio> socios;
+   @ManyToMany(mappedBy = "modalidades")
+    private Set<Treinador> treinadores;
+   @Id
     private String nome;
-    private List<Escalao> escaloes;
+   // private List<Escalao> escaloes;
 
     public Modalidade( String nome) {
-        this.socios = new LinkedList<Socio>();
-        this.treinadores = new LinkedList<Treinador>();
+      //  this.socios = new LinkedList<Socio>();
+        this.treinadores = new LinkedHashSet<>();
         this.nome = nome;
-        this.escaloes = new LinkedList<Escalao>();
+      //  this.escaloes = new LinkedList<Escalao>();
     }
     public Modalidade() {
+        this("");
+    }
+    public Set<Treinador> getTreinadores(){
+        return this.treinadores;
     }
 
-    public List<Socio> getSocios() {
-        return socios;
-    }
-
-    public void setSocios(List<Socio> socios) {
-        this.socios = socios;
-    }
-
-    public List<Treinador> getTreinadores() {
-        return treinadores;
-    }
-
-    public void setTreinadores(List<Treinador> treinadores) {
+    public void setTreinadores(Set<Treinador> treinadores) {
         this.treinadores = treinadores;
     }
 
@@ -40,16 +43,10 @@ public class Modalidade {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
+    }}
 
-    public List<Escalao> getEscaloes() {
-        return escaloes;
-    }
-
-    public void setEscaloes(List<Escalao> escaloes) {
-        this.escaloes = escaloes;
-    }
 //----------------------------------------ESCALAO---------------------------------
+    /*
 public void addEscalao(Escalao esc){
     if(!escaloes.contains(esc)){
         escaloes.add(esc);
@@ -73,3 +70,4 @@ public void addSocio(Socio socio){
         }
     }
 }
+*/

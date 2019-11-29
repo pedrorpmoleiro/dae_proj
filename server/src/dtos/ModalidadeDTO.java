@@ -1,9 +1,9 @@
 package dtos;
 
-public class ModalidadDTO {
+public class ModalidadeDTO {
     private String nome;
 
-    public ModalidadDTO(String nome) {
+    public ModalidadeDTO(String nome) {
         this.nome = nome;
     }
 
