@@ -15,9 +15,6 @@ import java.io.Serializable;
         )
 })*/
 public class Treinador extends Socio implements Serializable {
-    @Id
-    private int id;
-
     public Treinador() {
     }
 }

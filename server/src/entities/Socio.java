@@ -6,8 +6,6 @@ import java.io.Serializable;
 
 @Entity
 public class Socio extends User implements Serializable {
-    @Id
-    private int id;
 
     public Socio() {
     }
