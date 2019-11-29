@@ -12,6 +12,7 @@ import java.util.Set;
                 query = "SELECT s FROM Modalidade s ORDER BY s.nome" // JPQL
         )
 })
+@Table(name="MODALIDADES")
 public class Modalidade implements Serializable {
    // private List<Socio> socios;
    @ManyToMany(mappedBy = "modalidades")
