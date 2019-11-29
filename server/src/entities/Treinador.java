@@ -14,7 +14,7 @@ import java.io.Serializable;
                 query = "SELECT s FROM Student s ORDER BY s.name" // JPQL
         )
 })*/
-public class Treinador implements Serializable {
+public class Treinador extends Socio implements Serializable {
     @Id
     private int id;
 
