@@ -1,13 +1,11 @@
 package ejbs;
 
-import entities.ProductType;
+import exceptions.MyEntityExistsException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Startup
 @Singleton(name = "ConfigEJB")
@@ -15,22 +13,37 @@ public class ConfigBean {
     @EJB
     private ModalidadeBean modalidadeBean;
     @EJB
-    private ProductBean productBean;
-
-    private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
+    private AdministradorBean administradorBean;
+    @EJB
+    private TreinadorBean treinadorBean;
+    @EJB
+    private AtletaBean atletaBean;
+    public ConfigBean() {
+    }
 
     @PostConstruct
     public void populateDB() {
         try {
-            //modalidadeBean.create("BASQUETBALL");
-            //modalidadeBean.create("FOOTEBOLL");
+        modalidadeBean.create("BASQUETBALL");
+        modalidadeBean.create("FOOTEBOLL");
 
-            productBean.create(1, ProductType.AULA, "123", 24.0);
-            productBean.create(2, ProductType.ARTIGO, "123", 124.0);
-            productBean.create(3, ProductType.INSCRICAO, "123", 424.0);
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-            logger.log(Level.WARNING, ex.getMessage());
+        /* Admins */
+
+            administradorBean.create("kenalx1999","123123","kevin","kevin@gmail.com");
+            administradorBean.create("chaca","123123","andres","andres@gmail.com");
+            administradorBean.create("pedrinsky","123123","pedro","pedro@gmail.com");
+
+            /* Treinador */
+
+            treinadorBean.create("lucho","456456","luis","luis@gmail.com");
+            treinadorBean.create("mateo","456456","mateo","mateo@gmail.com");
+
+            /*Atleta*/
+            atletaBean.create("mario","789789","mario","mario@gmail.com");
+            atletaBean.create("santiago","789789","santiago","santiago@gmail.com");
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 }

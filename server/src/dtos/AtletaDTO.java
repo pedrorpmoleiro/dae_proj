@@ -1,24 +1,32 @@
 package dtos;
 
-import javax.persistence.Id;
-import java.io.Serializable;
+import entities.Treinador;
 
-public class TreinadorDTO implements Serializable {
-    @Id
-    private String username;
+import javax.persistence.Id;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class AtletaDTO {
+
     private long idSocio;
     private String password;
     private String name;
     private String email;
-    public TreinadorDTO() {
+    private Set<Treinador> treinadores;
+    @Id
+    private String username;
+
+    public AtletaDTO() {
+        this.treinadores = new LinkedHashSet<Treinador>();
     }
 
-    public TreinadorDTO(long idSocio,String username, String password, String name, String email) {
+    public AtletaDTO(long idSocio, String username, String password, String name, String email) {
         this.idSocio = idSocio;
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.treinadores = new LinkedHashSet<Treinador>();
     }
 
     public String getUsername() {
@@ -59,5 +67,13 @@ public class TreinadorDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Treinador> getTreinadores() {
+        return treinadores;
+    }
+
+    public void setTreinadores(Set<Treinador> treinadores) {
+        this.treinadores = treinadores;
     }
 }
