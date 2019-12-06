@@ -1,21 +1,25 @@
 package entities;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import java.io.Serializable;
 
 @Entity
-/*
+
 @NamedQueries({
         @NamedQuery(
-                name = "getAllStudents",
-                query = "SELECT s FROM Student s ORDER BY s.name" // JPQL
+                name = "getAllAdministradores",
+                query = "SELECT a FROM Administrador a ORDER BY a.idSocio" // JPQL
         )
-})*/
-public class Administrador extends User implements Serializable {
-    @Id
-    private int id;
+})
+public class Administrador extends Socio implements Serializable {
+
     public Administrador() {
 
+    }
+
+    public Administrador(long idSocio, String password, String name, String email) {
+        super(idSocio, password, name, email);
     }
 }

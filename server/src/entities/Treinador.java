@@ -1,9 +1,6 @@
 package entities;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import java.io.Serializable;
 
 @Entity
@@ -15,9 +12,6 @@ import java.io.Serializable;
         )
 })*/
 public class Treinador extends Socio implements Serializable {
-    @Id
-    private int id;
-
     public Treinador() {
     }
 }

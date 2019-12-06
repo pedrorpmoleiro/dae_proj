@@ -1,44 +1,30 @@
-package entities;
+package dtos;
 
-
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-@Entity
-@Table(name="SOCIOS")
-public abstract class Socio {
+public class AdministradorDTO implements Serializable {
     @Id
     private long idSocio;
-    @NotNull
     private String password;
-    @NotNull
     private String name;
-    @NotNull
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
-            + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
-            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-            message = "{invalid.email}")
     private String email;
+    public AdministradorDTO() {
+    }
 
-    public Socio(long idSocio, String password, String name, String email) {
+    public AdministradorDTO(long idSocio, String password, String name, String email) {
         this.idSocio = idSocio;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public Socio() {
-    }
-
     public long getIdSocio() {
         return idSocio;
     }
 
-    public void setIdSocio(long id) {
-        this.idSocio = id;
+    public void setIdSocio(long idSocio) {
+        this.idSocio = idSocio;
     }
 
     public String getPassword() {
