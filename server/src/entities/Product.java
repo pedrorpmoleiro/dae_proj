@@ -1,13 +1,11 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "PRODUCTS")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllProducts",
@@ -21,6 +19,7 @@ public class Product implements Serializable {
     private ProductType type;
     private String description;
     private double value;
+    private boolean deleted;
 
     public Product() {
     }
@@ -30,6 +29,7 @@ public class Product implements Serializable {
         this.type = type;
         this.description = description;
         this.value = value;
+        this.deleted = false;
     }
 
     public int getCode() {
@@ -62,5 +62,13 @@ public class Product implements Serializable {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
