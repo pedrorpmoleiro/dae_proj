@@ -59,7 +59,7 @@ public class AtletaBean {
 
     }
 
-    public Atleta findAdministrador(String idSocio) {
+    public Atleta findAtleta(String idSocio) {
         try {
             return em.find(Atleta.class, idSocio);
         } catch (Exception e) {
