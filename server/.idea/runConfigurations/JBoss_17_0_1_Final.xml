@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="JBoss 17.0.1.Final" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss 17.0.1.Final" ALTERNATIVE_JRE_ENABLED="false">
-    <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/project_war_exploded" />
+    <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/project" />
     <deployment>
       <artifact name="project:war exploded">
         <settings />
