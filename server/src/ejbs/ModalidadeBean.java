@@ -1,13 +1,12 @@
 package ejbs;
 
 import entities.Modalidade;
-import entities.ModalidadeType;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -55,16 +54,33 @@ public class ModalidadeBean {
             throw new EJBException("ERROR_FINDING_MODALIDADE", e);
         }
     }
-    public void update(String name){
+    public void update(String name,String newName){
         try {
             Modalidade modalidade = em.find(Modalidade.class, name);
             if(modalidade!=null){
-                em.lock(modalidade, LockModeType.OPTIMISTIC);
-                modalidade.setNome(name);
+                modalidade.setNome(newName);
+
             }
         }catch (Exception e){
-            System.err.println("SYS ERROR MI SO YA NADA :C" + e.getMessage());
+            System.err.println("SYS_ERROR_UPDATE" + e.getMessage());
         }
 
     }
+    public void delete(String nome) throws MyEntityNotFoundException, MyIllegalArgumentException {
+        try{
+            Modalidade modalidade=em.find(Modalidade.class,nome);
+            if(modalidade!=null){
+                em.remove(modalidade);
+            }else{
+                throw new MyEntityNotFoundException("MODALIDADE_NOT_EXIST");
+            }
+        }catch (MyEntityNotFoundException e){
+            throw  e;
+        }catch (Exception e){
+
+        }
+    }
+
+
+
 }
