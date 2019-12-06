@@ -34,14 +34,31 @@ public class ModalidadeController {
         try {
             return toDTOsNoSocios(modalidadeBean.all());
         } catch (Exception e) {
-            throw new EJBException("ERROR_GET_STUDENTS", e);
+            throw new EJBException("ERROR_GET_MODALIDADE", e);
         }
     }
+    //CREAR
     @POST
     @Path("/")
-    public Response createNewStudent (ModalidadeDTO modalidadeDTO) throws MyEntityExistsException, MyEntityNotFoundException, Exception{
+    public Response createNewModalidade (ModalidadeDTO modalidadeDTO) throws MyEntityExistsException, MyEntityNotFoundException, Exception{
         modalidadeBean.create(modalidadeDTO.getNome());
         return Response.status(Response.Status.CREATED).build();
     }
+
+    @PUT
+    @Path("{name}")
+    public Response update(@PathParam("name") String name) throws MyEntityNotFoundException,Exception{
+       modalidadeBean.update(name);
+        return Response.status(Response.Status.OK).entity(toDTONoSocios(modalidadeBean.findModalidade(name))).build();
+    }
+/*
+    @DELETE
+    @Path("{name}")
+    public Response delete(@PathParam("name") String name) throws MyEntityNotFoundException,Exception{
+        modalidadeBean.update(name);
+        return Response.status(Response.Status.OK).entity(toDTONoSocios(modalidadeBean.findModalidade(name))).build();
+    }
+*/
+
 
 }

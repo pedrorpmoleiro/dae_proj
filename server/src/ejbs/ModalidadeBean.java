@@ -7,6 +7,7 @@ import exceptions.MyEntityNotFoundException;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ModalidadeBean {
         }
 
     }
-    public Modalidade findStudent(String name) throws MyEntityNotFoundException {
+    public Modalidade findModalidade(String name) throws MyEntityNotFoundException {
         try{
             Modalidade modalidade= em.find(Modalidade.class, name);
             if(modalidade==null){
@@ -53,5 +54,17 @@ public class ModalidadeBean {
         catch (Exception e) {
             throw new EJBException("ERROR_FINDING_MODALIDADE", e);
         }
+    }
+    public void update(String name){
+        try {
+            Modalidade modalidade = em.find(Modalidade.class, name);
+            if(modalidade!=null){
+                em.lock(modalidade, LockModeType.OPTIMISTIC);
+                modalidade.setNome(name);
+            }
+        }catch (Exception e){
+            System.err.println("SYS ERROR MI SO YA NADA :C" + e.getMessage());
+        }
+
     }
 }
