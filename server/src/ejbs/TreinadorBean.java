@@ -16,12 +16,12 @@ public class TreinadorBean {
     @PersistenceContext
     EntityManager em;
 
-    public void create(long idSocio, String password, String name, String email)throws MyEntityExistsException {
+    public void create( String username,String password, String name, String email)throws MyEntityExistsException {
 
         try {
-            Treinador treinador = em.find(Treinador.class, idSocio);
+            Treinador treinador = em.find(Treinador.class, username);
             if (treinador == null) {
-                treinador = new Treinador(idSocio, password, name, email);
+                treinador = new Treinador(username,password, name, email);
                 em.persist(treinador);
             } else {
                 throw new MyEntityExistsException("Invalid Username: Username in use");
@@ -31,12 +31,12 @@ public class TreinadorBean {
         }
     }
 
-    public void update(long idSocio, String password, String name, String email) throws MyEntityNotFoundException {
-        Treinador treinador = em.find(Treinador.class, idSocio);
+    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException {
+        Treinador treinador = em.find(Treinador.class, username);
         if (treinador != null) {
             em.lock(treinador, LockModeType.OPTIMISTIC);
 
-            treinador.setIdSocio(idSocio);
+            treinador.setUsername(username);
             treinador.setPassword(password);
             treinador.setName(name);
             treinador.setEmail(email);

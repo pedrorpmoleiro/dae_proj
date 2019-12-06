@@ -19,12 +19,12 @@ public class AdministradorBean {
     @PersistenceContext
     EntityManager em;
 
-    public void create(long idSocio, String password, String name, String email)throws MyEntityExistsException{
+    public void create(String username,String password, String name, String email)throws MyEntityExistsException{
 
         try {
-            Administrador administrador = em.find(Administrador.class, idSocio);
+            Administrador administrador = em.find(Administrador.class, username);
             if (administrador == null) {
-                    administrador = new Administrador(idSocio, password, name, email);
+                    administrador = new Administrador(username,password, name, email);
                     em.persist(administrador);
                 } else {
                 throw new MyEntityExistsException("Invalid Username: Username in use");
@@ -34,12 +34,12 @@ public class AdministradorBean {
         }
     }
 
-    public void update(long idSocio, String password, String name, String email) throws MyEntityNotFoundException{
-        Administrador administrador = em.find(Administrador.class, idSocio);
+    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException{
+        Administrador administrador = em.find(Administrador.class, username);
         if (administrador != null) {
             em.lock(administrador, LockModeType.OPTIMISTIC);
 
-                administrador.setIdSocio(idSocio);
+                administrador.setUsername(username);
                 administrador.setPassword(password);
                 administrador.setName(name);
                 administrador.setEmail(email);
@@ -61,9 +61,9 @@ public class AdministradorBean {
 
     }
 
-    public Administrador findAdministrador(String idSocio) {
+    public Administrador findAdministrador(String username) {
         try {
-            return em.find(Administrador.class, idSocio);
+            return em.find(Administrador.class, username);
         } catch (Exception e) {
             throw new EJBException("ERROR_FINDING_ADMIN", e);
         }

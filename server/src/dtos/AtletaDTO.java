@@ -7,23 +7,34 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class AtletaDTO {
-    @Id
+
     private long idSocio;
     private String password;
     private String name;
     private String email;
     private Set<Treinador> treinadores;
+    @Id
+    private String username;
 
     public AtletaDTO() {
         this.treinadores = new LinkedHashSet<Treinador>();
     }
 
-    public AtletaDTO(long idSocio, String password, String name, String email) {
+    public AtletaDTO(long idSocio, String username, String password, String name, String email) {
         this.idSocio = idSocio;
+        this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
         this.treinadores = new LinkedHashSet<Treinador>();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public long getIdSocio() {

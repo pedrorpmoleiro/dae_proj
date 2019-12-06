@@ -34,6 +34,7 @@ public class UserController {
     AdministradorDTO toDTO(Administrador administrador) {
         return new AdministradorDTO(
                 administrador.getIdSocio(),
+                administrador.getUsername(),
                 administrador.getPassword(),
                 administrador.getName(),
                 administrador.getEmail()
@@ -55,7 +56,7 @@ public class UserController {
     @Path("/administradores")
     public Response createNewAdministrador(AdministradorDTO administradorDTO) throws MyEntityExistsException {
         administradorBean.create(
-                administradorDTO.getIdSocio(),
+                administradorDTO.getUsername(),
                 administradorDTO.getPassword(),
                 administradorDTO.getName(),
                 administradorDTO.getEmail());
@@ -78,6 +79,7 @@ public class UserController {
     AtletaDTO toDTO(Atleta atleta) {
         return new AtletaDTO(
                 atleta.getIdSocio(),
+                atleta.getUsername(),
                 atleta.getPassword(),
                 atleta.getName(),
                 atleta.getEmail()
@@ -99,7 +101,7 @@ public class UserController {
     @Path("/atletas")
     public Response createNewAtleta(AtletaDTO atletaDTO) throws MyEntityExistsException {
         atletaBean.create(
-                atletaDTO.getIdSocio(),
+                atletaDTO.getUsername(),
                 atletaDTO.getPassword(),
                 atletaDTO.getName(),
                 atletaDTO.getEmail());
@@ -120,6 +122,7 @@ public class UserController {
     TreinadorDTO toDTO(Treinador treinador) {
         return new TreinadorDTO(
                 treinador.getIdSocio(),
+                treinador.getUsername(),
                 treinador.getPassword(),
                 treinador.getName(),
                 treinador.getEmail()
@@ -141,7 +144,7 @@ public class UserController {
     @Path("/treinadores")
     public Response createNewTreinador(TreinadorDTO treinadorDTO) throws MyEntityExistsException {
         treinadorBean.create(
-                treinadorDTO.getIdSocio(),
+                treinadorDTO.getUsername(),
                 treinadorDTO.getPassword(),
                 treinadorDTO.getName(),
                 treinadorDTO.getEmail());

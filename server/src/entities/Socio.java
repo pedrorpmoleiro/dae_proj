@@ -1,9 +1,7 @@
 package entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -11,6 +9,8 @@ import javax.validation.constraints.Pattern;
 @Table(name="SOCIOS")
 public abstract class Socio {
     @Id
+    private String username;
+    @GeneratedValue (strategy=GenerationType.SEQUENCE)
     private long idSocio;
     @NotNull
     private String password;
@@ -23,14 +23,22 @@ public abstract class Socio {
             message = "{invalid.email}")
     private String email;
 
-    public Socio(long idSocio, String password, String name, String email) {
-        this.idSocio = idSocio;
+    public Socio(String username,String password, String name, String email) {
         this.password = password;
         this.name = name;
         this.email = email;
+        this.username = username;
     }
 
     public Socio() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public long getIdSocio() {

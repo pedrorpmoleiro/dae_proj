@@ -17,12 +17,12 @@ public class AtletaBean {
     @PersistenceContext
     EntityManager em;
 
-    public void create(long idSocio, String password, String name, String email)throws MyEntityExistsException {
+    public void create(String username,String password, String name, String email)throws MyEntityExistsException {
 
         try {
-            Atleta atleta = em.find(Atleta.class, idSocio);
+            Atleta atleta = em.find(Atleta.class, username);
             if (atleta == null) {
-                atleta = new Atleta(idSocio, password, name, email);
+                atleta = new Atleta(username,password, name, email);
                 em.persist(atleta);
             } else {
                 throw new MyEntityExistsException("Invalid Username: Username in use");
@@ -32,12 +32,12 @@ public class AtletaBean {
         }
     }
 
-    public void update(long idSocio, String password, String name, String email) throws MyEntityNotFoundException{
-        Atleta atleta = em.find(Atleta.class, idSocio);
+    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException{
+        Atleta atleta = em.find(Atleta.class, username);
         if (atleta != null) {
             em.lock(atleta, LockModeType.OPTIMISTIC);
 
-            atleta.setIdSocio(idSocio);
+            atleta.setUsername(username);
             atleta.setPassword(password);
             atleta.setName(name);
             atleta.setEmail(email);
@@ -59,9 +59,9 @@ public class AtletaBean {
 
     }
 
-    public Atleta findAtleta(String idSocio) {
+    public Atleta findAtleta(String username) {
         try {
-            return em.find(Atleta.class, idSocio);
+            return em.find(Atleta.class, username);
         } catch (Exception e) {
             throw new EJBException("ERROR_FINDING_ATLETAS", e);
         }
