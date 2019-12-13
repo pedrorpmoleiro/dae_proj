@@ -9,6 +9,8 @@
       single-select
       item-key="code"
       v-model="selected"
+      loading-text="A carregar ..."
+      :loading="loading"
     />
   </v-container>
 </template>
@@ -28,7 +30,8 @@
           {text: 'Recibo', value: 'receipt'},
         ],
         payments: [],
-        selected: undefined
+        selected: undefined,
+        loading: true
       }
     },
     mounted() {
@@ -41,6 +44,7 @@
         });
 
         this.payments = response.data;
+        this.loading = false;
       });
     }
   }
