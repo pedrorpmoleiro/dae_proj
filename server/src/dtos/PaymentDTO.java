@@ -1,8 +1,6 @@
 package dtos;
 
 import entities.PaymentStatus;
-import entities.Product;
-import entities.Socio;
 
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -11,8 +9,8 @@ import java.util.Date;
 public class PaymentDTO implements Serializable {
     @Id
     private int code;
-    private Socio socio;
-    private Product product;
+    private String socioUsername;
+    private int productCode;
     private Date date;
     private int quantity;
     private double price;
@@ -22,10 +20,10 @@ public class PaymentDTO implements Serializable {
     public PaymentDTO() {
     }
 
-    public PaymentDTO(int code, Socio socio, Product product, Date date, int quantity, double price, PaymentStatus status, String receipt) {
+    public PaymentDTO(int code, String socioUsername, int productCode, Date date, int quantity, double price, PaymentStatus status, String receipt) {
         this.code = code;
-        this.socio = socio;
-        this.product = product;
+        this.socioUsername = socioUsername;
+        this.productCode = productCode;
         this.date = date;
         this.quantity = quantity;
         this.price = price;
@@ -41,20 +39,20 @@ public class PaymentDTO implements Serializable {
         this.code = code;
     }
 
-    public Socio getSocio() {
-        return socio;
+    public String getSocioUsername() {
+        return socioUsername;
     }
 
-    public void setSocio(Socio socio) {
-        this.socio = socio;
+    public void setSocioUsername(String socioUsername) {
+        this.socioUsername = socioUsername;
     }
 
-    public Product getProduct() {
-        return product;
+    public int getProductCode() {
+        return productCode;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductCode(int productCode) {
+        this.productCode = productCode;
     }
 
     public Date getDate() {

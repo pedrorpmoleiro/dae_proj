@@ -4,6 +4,7 @@ import entities.Payment;
 import entities.PaymentStatus;
 import entities.Product;
 import entities.Socio;
+import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJBException;
@@ -52,7 +53,16 @@ public class PaymentBean {
         }
     }
 
-    public Payment create(int code, int socio_username, int product_code, Date date, int quantity, double price, PaymentStatus status, String receipt) throws MyEntityNotFoundException {
+    public Payment create(int code, String socio_username, int product_code, Date date, int quantity,
+                          double price, PaymentStatus status, String receipt)
+            throws MyEntityNotFoundException, MyEntityExistsException {
+
+        Payment payment = em.find(Payment.class, code);
+
+        if (payment != null) {
+            throw new MyEntityExistsException("ERROR_PAYMENTS_EXISTS");
+        }
+
         Socio socio = em.find(Socio.class, socio_username);
 
         if (socio == null) {
@@ -65,6 +75,10 @@ public class PaymentBean {
             throw new MyEntityNotFoundException("ERROR_FINDING_PRODUCT");
         }
 
-        
+        payment = new Payment(code, socio, product, date, quantity, price, status, receipt);
+
+        em.persist(payment);
+
+        return payment;
     }
 }
