@@ -23,7 +23,7 @@ public class Payment implements Serializable {
     @JoinColumn(name = "product_code")
     private Product product;
     @NotNull
-    private Date date;
+    private Date dateTime;
     @NotNull
     private int quantity;
     @NotNull
@@ -37,11 +37,11 @@ public class Payment implements Serializable {
     public Payment() {
     }
 
-    public Payment(int code, Socio socio, Product product, Date date, int quantity, double price, PaymentStatus status, String receipt) {
+    public Payment(int code, Socio socio, Product product, Date dateTime, int quantity, double price, PaymentStatus status, String receipt) {
         this.code = code;
         this.socio = socio;
         this.product = product;
-        this.date = date;
+        this.dateTime = dateTime;
         this.quantity = quantity;
         this.price = price;
         this.status = status;
@@ -73,12 +73,12 @@ public class Payment implements Serializable {
         this.product = product;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateTime(Date date) {
+        this.dateTime = date;
     }
 
     public int getQuantity() {

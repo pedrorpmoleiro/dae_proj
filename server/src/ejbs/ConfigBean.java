@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.time.Instant;
 import java.util.Date;
 
 @Startup
@@ -56,11 +57,11 @@ public class ConfigBean {
             productBean.create(3, ProductType.INSCRICAO, "123", 424.0);
 
             // PAYMENTS
-            paymentBean.create(1, "lucho", 1, new Date(), 2, 200.0,
+            paymentBean.create(1, "lucho", 1, Instant.now().getEpochSecond(), 2, 200.0,
                     PaymentStatus.PAID, "RECEIPT");
-            paymentBean.create(2, "mario", 3, new Date(), 1, 50.0,
+            paymentBean.create(2, "mario", 3, Instant.now().getEpochSecond(), 1, 50.0,
                     PaymentStatus.NOT_PAID, "RECEIPT");
-            paymentBean.create(3, "mateo", 2, new Date(), 6, 2400.0,
+            paymentBean.create(3, "mateo", 2, Instant.now().getEpochSecond(), 6, 2400.0,
                     PaymentStatus.PARCIAL, "RECEIPT");
         } catch (Exception e) {
             System.err.println(e.getMessage());

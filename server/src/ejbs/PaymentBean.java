@@ -53,7 +53,7 @@ public class PaymentBean {
         }
     }
 
-    public Payment create(int code, String socio_username, int product_code, Date date, int quantity,
+    public Payment create(int code, String socio_username, int product_code, long timestamp, int quantity,
                           double price, PaymentStatus status, String receipt)
             throws MyEntityNotFoundException, MyEntityExistsException {
 
@@ -75,7 +75,7 @@ public class PaymentBean {
             throw new MyEntityNotFoundException("ERROR_FINDING_PRODUCT");
         }
 
-        payment = new Payment(code, socio, product, date, quantity, price, status, receipt);
+        payment = new Payment(code, socio, product, new Date(timestamp), quantity, price, status, receipt);
 
         em.persist(payment);
 

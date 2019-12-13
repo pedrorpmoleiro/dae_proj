@@ -26,7 +26,7 @@ public class PaymentController {
                 payment.getCode(),
                 payment.getSocio().getUsername(),
                 payment.getProduct().getCode(),
-                payment.getDate(),
+                payment.getDateTime().getTime(),
                 payment.getQuantity(),
                 payment.getPrice(),
                 payment.getStatus(),

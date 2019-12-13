@@ -4,14 +4,13 @@ import entities.PaymentStatus;
 
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Date;
 
 public class PaymentDTO implements Serializable {
     @Id
     private int code;
     private String socioUsername;
     private int productCode;
-    private Date date;
+    private long timestamp;
     private int quantity;
     private double price;
     private PaymentStatus status;
@@ -20,11 +19,11 @@ public class PaymentDTO implements Serializable {
     public PaymentDTO() {
     }
 
-    public PaymentDTO(int code, String socioUsername, int productCode, Date date, int quantity, double price, PaymentStatus status, String receipt) {
+    public PaymentDTO(int code, String socioUsername, int productCode, long timestamp, int quantity, double price, PaymentStatus status, String receipt) {
         this.code = code;
         this.socioUsername = socioUsername;
         this.productCode = productCode;
-        this.date = date;
+        this.timestamp = timestamp;
         this.quantity = quantity;
         this.price = price;
         this.status = status;
@@ -55,12 +54,12 @@ public class PaymentDTO implements Serializable {
         this.productCode = productCode;
     }
 
-    public Date getDate() {
-        return date;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getQuantity() {
