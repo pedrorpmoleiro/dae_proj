@@ -1,10 +1,16 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="payments"
-    :items-per-page="5"
-    class="elevation-1"
-  />
+  <v-container>
+    <v-data-table
+      :headers="headers"
+      :items="payments"
+      :items-per-page="5"
+      class="elevation-1"
+      show-select
+      single-select
+      item-key="code"
+      v-model="selected"
+    />
+  </v-container>
 </template>
 
 <script>
@@ -22,6 +28,7 @@
           {text: 'Recibo', value: 'receipt'},
         ],
         payments: [],
+        selected: undefined
       }
     },
     mounted() {
