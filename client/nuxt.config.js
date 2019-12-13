@@ -41,16 +41,22 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
+    // Doc: https://bootstrap-vue.js.org/docs/
+    'bootstrap-vue/nuxt',
+    '@nuxtjs/axios'
   ],
-  /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
   axios: {
+    proxy: true,
+    credentials: true
   },
-  /*
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:8080/project/api/',
+      pathRewrite: {
+        '^/api/': ''
+      }
+    }
+  },/*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
   */
