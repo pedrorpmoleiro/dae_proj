@@ -39,10 +39,10 @@ public class UserController {
     SocioDTO toDTO(Socio socio) {
         return new SocioDTO(
                 socio.getIdSocio(),
-                socio.getUsername(),
                 socio.getPassword(),
                 socio.getName(),
                 socio.getEmail(),
+                socio.getUsername(),
                 socio.getTipo()
         );
     }

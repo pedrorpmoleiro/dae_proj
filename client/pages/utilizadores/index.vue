@@ -3,7 +3,6 @@
     <v-card-title>
       <v-text-field
         v-model="search"
-        append-icon="search"
         label="Search"
         single-line
         hide-details
@@ -11,7 +10,7 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="users"
       :search="search"
     ></v-data-table>
   </v-card>
@@ -21,13 +20,22 @@
     export default {
         data() {
             return {
-                fields: ['username', 'name', 'email', 'courseName', 'actions'], students: []
+                search: '',
+                headers: [
+                    {text: 'ID', value: 'idSocio'},
+                    {text: 'Nome', value: 'name'},
+                    {text: 'E-mail', value: 'email'},
+                    {text: 'Username', value: 'username'},
+                    {text: 'Tipo', value: 'tipo'}
+                ], users: []
             }
-        }, created() {
-            this.$axios.$get('/api/students').then((students) => {
-                this.students = students
+        }, mounted() {
+            this.$axios.$get('/api/users').then((response) => {
+               console.log(response)
+                this.users = response
             })
         }
+    }
 </script>
 
 <style scoped>
