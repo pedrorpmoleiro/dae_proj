@@ -1,25 +1,26 @@
 package entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
-/*
+
 @NamedQueries({
         @NamedQuery(
-                name = "getAllStudents",
-                query = "SELECT s FROM Student s ORDER BY s.name" // JPQL
+                name = "getAllAtletas",
+                query = "SELECT a FROM Atleta a ORDER BY a.idSocio" // JPQL
         )
-})*/
+})
+
 public class Atleta extends Socio implements Serializable {
-        @Id
-        private int id;
-        //private List<Atleta> atletas;
+
+      /*  @ManyToMany(mappedBy = "socios")
+        private Set<Treinador> treinadores;*/
         public Atleta() {
         }
+
+    public Atleta( String username,String password, String name, String email) {
+        super( username,password, name, email);
+    }
 }

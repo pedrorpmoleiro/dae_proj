@@ -1,36 +1,32 @@
-package entities;
+package dtos;
 
+import entities.Treinador;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.persistence.Id;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Entity
-@Table(name="SOCIOS")
-public abstract class Socio {
+public class AtletaDTO {
+
+    private long idSocio;
+    private String password;
+    private String name;
+    private String email;
+    private Set<Treinador> treinadores;
     @Id
     private String username;
-    @GeneratedValue (strategy=GenerationType.SEQUENCE)
-    private long idSocio;
-    @NotNull
-    private String password;
-    @NotNull
-    private String name;
-    @NotNull
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
-            + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
-            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-            message = "{invalid.email}")
-    private String email;
 
-    public Socio(String username,String password, String name, String email) {
+    public AtletaDTO() {
+        this.treinadores = new LinkedHashSet<Treinador>();
+    }
+
+    public AtletaDTO(long idSocio, String username, String password, String name, String email) {
+        this.idSocio = idSocio;
+        this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
-        this.username = username;
-    }
-
-    public Socio() {
+        this.treinadores = new LinkedHashSet<Treinador>();
     }
 
     public String getUsername() {
@@ -45,8 +41,8 @@ public abstract class Socio {
         return idSocio;
     }
 
-    public void setIdSocio(long id) {
-        this.idSocio = id;
+    public void setIdSocio(long idSocio) {
+        this.idSocio = idSocio;
     }
 
     public String getPassword() {
@@ -71,5 +67,13 @@ public abstract class Socio {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Treinador> getTreinadores() {
+        return treinadores;
+    }
+
+    public void setTreinadores(Set<Treinador> treinadores) {
+        this.treinadores = treinadores;
     }
 }
