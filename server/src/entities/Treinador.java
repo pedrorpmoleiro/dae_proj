@@ -21,5 +21,6 @@ public class Treinador extends Socio implements Serializable {
 
     public Treinador( String username,String password, String name, String email) {
         super( username,password, name, email);
+        setTipo(SocioType.TREINADOR);
     }
 }

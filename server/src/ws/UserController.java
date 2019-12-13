@@ -2,12 +2,15 @@ package ws;
 
 import dtos.AdministradorDTO;
 import dtos.AtletaDTO;
+import dtos.SocioDTO;
 import dtos.TreinadorDTO;
 import ejbs.AdministradorBean;
 import ejbs.AtletaBean;
+import ejbs.SocioBean;
 import ejbs.TreinadorBean;
 import entities.Administrador;
 import entities.Atleta;
+import entities.Socio;
 import entities.Treinador;
 import exceptions.MyEntityExistsException;
 
@@ -28,8 +31,35 @@ public class UserController {
     private AtletaBean atletaBean;
     @EJB
     private TreinadorBean treinadorBean;
+    @EJB
+    private SocioBean socioBean;
 
 
+    // Converts an entity to a DTO class
+    SocioDTO toDTO(Socio socio) {
+        return new SocioDTO(
+                socio.getIdSocio(),
+                socio.getUsername(),
+                socio.getPassword(),
+                socio.getName(),
+                socio.getEmail(),
+                socio.getTipo()
+        );
+    }
+
+    // converts an entire list of entities into a list of DTOs
+    List<SocioDTO> toDTOs(List<Socio> socios) {
+        return socios.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/") // means: the relative url path is “/api/students/”
+    public Response allSocios() {
+        return Response.status(Response.Status.OK).entity(toDTOs(socioBean.all())).build();
+    }
+
+//********************Administrador *****************
     // Converts an entity to a DTO class
     AdministradorDTO toDTO(Administrador administrador) {
         return new AdministradorDTO(
@@ -45,6 +75,7 @@ public class UserController {
     List<AdministradorDTO> toDTOsAdministrador(List<Administrador> administradores) {
         return administradores.stream().map(this::toDTO).collect(Collectors.toList());
     }
+
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/administradores") // means: the relative url path is “/api/students/”
