@@ -19,8 +19,12 @@ public class Modalidade implements Serializable {
    @ManyToMany(mappedBy = "modalidades")
     private Set<Treinador> treinadores;
     */
-    @Id
+
     private String nome;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private  long id;
+
     @OneToMany(mappedBy = "modalidade", cascade = CascadeType.REMOVE)
     private Set<Escalao> escaloes;
 

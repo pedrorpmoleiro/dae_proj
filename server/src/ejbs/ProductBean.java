@@ -2,7 +2,6 @@ package ejbs;
 
 import entities.Product;
 import entities.ProductType;
-import exceptions.MyConstraintViolationException;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
