@@ -22,5 +22,6 @@ public class Administrador extends Socio implements Serializable {
 
     public Administrador( String username,String password, String name, String email) {
         super( username,password, name, email);
+        setTipo(SocioType.ADMINISTRADOR);
     }
 }
