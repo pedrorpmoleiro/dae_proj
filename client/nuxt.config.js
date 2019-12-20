@@ -30,6 +30,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/material_icons.js',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -44,6 +45,10 @@ module.exports = {
     // Doc: https://bootstrap-vue.js.org/docs/
     '@nuxtjs/axios'
   ],
+  /*
+  ** Axios module configuration
+  ** See https://axios.nuxtjs.org/options
+  */
   axios: {
     proxy: true,
     credentials: true
@@ -55,7 +60,8 @@ module.exports = {
         '^/api/': ''
       }
     }
-  },/*
+  },
+  /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
   */

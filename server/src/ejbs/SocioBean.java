@@ -16,14 +16,14 @@ public class SocioBean {
 
     @PersistenceContext
     EntityManager em;
-/*
+
     public void create(String username,String password, String name, String email)throws MyEntityExistsException {
 
         try {
-            Administrador administrador = em.find(Administrador.class, username);
-            if (administrador == null) {
-                administrador = new Administrador(username,password, name, email);
-                em.persist(administrador);
+            Socio socio = em.find(Socio.class, username);
+            if (socio == null) {
+                socio = new Socio(username,password, name, email);
+                em.persist(socio);
             } else {
                 throw new MyEntityExistsException("Invalid Username: Username in use");
             }
@@ -31,7 +31,7 @@ public class SocioBean {
             System.out.println("Server error");
         }
     }
-
+/*
     public void update(String username, String password, String name, String email) throws MyEntityNotFoundException {
         Administrador administrador = em.find(Administrador.class, username);
         if (administrador != null) {

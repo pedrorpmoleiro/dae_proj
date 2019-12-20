@@ -4,6 +4,7 @@
       <v-text-field
         v-model="search"
         label="Search"
+        append-icon="search"
         single-line
         hide-details
       ></v-text-field>
@@ -13,6 +14,9 @@
       :items="users"
       :search="search"
     ></v-data-table>
+    <v-btn class="mx-2" fab dark color="indigo" href = "utilizadores/create">
+      <v-icon dark>mdi-plus</v-icon>
+    </v-btn>
   </v-card>
 </template>
 

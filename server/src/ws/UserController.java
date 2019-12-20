@@ -54,9 +54,21 @@ public class UserController {
 
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/") // means: the relative url path is “/api/students/”
+    @Path("/") // means: the relative url path is “/api/users/”
     public Response allSocios() {
         return Response.status(Response.Status.OK).entity(toDTOs(socioBean.all())).build();
+    }
+
+    @POST
+    @Path("/")
+    public Response createNewSocio(SocioDTO socioDTO) throws MyEntityExistsException {
+        socioBean.create(
+                socioDTO.getUsername(),
+                socioDTO.getPassword(),
+                socioDTO.getName(),
+                socioDTO.getEmail());
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
 //********************Administrador *****************
