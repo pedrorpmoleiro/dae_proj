@@ -24,8 +24,8 @@ public class ConfigBean {
     private ProductBean productBean;
     @EJB
     private PaymentBean paymentBean;
-    @EJB
-    private EscalaoBean escalaoBean;
+    //@EJB
+    //private EscalaoBean escalaoBean;
 
     public ConfigBean() {
     }
@@ -33,21 +33,21 @@ public class ConfigBean {
     @PostConstruct
     public void populateDB() {
         try {
+            //MODALIDADES
             modalidadeBean.create("BASQUETBALL");
             modalidadeBean.create("FOOTEBOLL");
 
-            escalaoBean.create("SUB20", "BASQUETBALL");
-            escalaoBean.create("SUB22", "BASQUETBALL");
-            escalaoBean.create("SUB19", "BASQUETBALL");
+            // ESCALOES
+            //escalaoBean.create("SUB20", "BASQUETBALL");
+            //escalaoBean.create("SUB22", "BASQUETBALL");
+            //escalaoBean.create("SUB19", "BASQUETBALL");
 
             /* Admins */
-
             administradorBean.create("kenalx1999", "123123", "kevin", "kevin@gmail.com");
             administradorBean.create("chaca", "123123", "andres", "andres@gmail.com");
             administradorBean.create("pedrinsky", "123123", "pedro", "pedro@gmail.com");
 
             /* Treinador */
-
             treinadorBean.create("lucho", "456456", "luis", "luis@gmail.com");
             treinadorBean.create("mateo", "456456", "mateo", "mateo@gmail.com");
 
