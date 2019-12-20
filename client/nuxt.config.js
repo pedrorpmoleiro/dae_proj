@@ -30,6 +30,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/material_icons.js',
   ],
   /*
   ** Nuxt.js dev-modules
