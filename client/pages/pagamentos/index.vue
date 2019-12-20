@@ -1,68 +1,9 @@
 <template>
   <v-container>
-
-    <v-row justify="center">
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on">Open Dialog</v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">User Profile</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field label="Legal first name*" required></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    label="Legal last name*"
-                    hint="example of persistent helper text"
-                    persistent-hint
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field label="Email*" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field label="Password*" type="password" required></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
-                    label="Age*"
-                    required
-                  ></v-select>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-autocomplete
-                    :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                    label="Interests"
-                    multiple
-                  ></v-autocomplete>
-                </v-col>
-              </v-row>
-            </v-container>
-            <small>*indicates required field</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-            <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
-
     <v-card-title>
-      Pagamentos
-      <v-spacer></v-spacer>
+      <v-col>
+        Pagamentos
+      </v-col>
       <v-text-field
         v-model="search"
         append-icon="search"
@@ -70,6 +11,71 @@
         single-line
         hide-details
       />
+
+      <v-spacer/>
+      <v-dialog v-model="dialog" persistent max-width="600px">
+        <template v-slot:activator="{ on }">
+          <v-btn color="primary" dark v-on="on">Adicionar Pagamento</v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="headline">{{ title }}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field label="Legal first name*" required/>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field label="Legal middle name" hint="example of helper text only on focus"/>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    label="Legal last name*"
+                    hint="example of persistent helper text"
+                    persistent-hint
+                    required
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Email*" required/>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Password*" type="password" required/>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-select
+                    :items="['0-17', '18-29', '30-54', '54+']"
+                    label="Age*"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-autocomplete
+                    :items="['Pago', 'Não Pago']"
+                    label="Estado"
+                    multiple
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer/>
+            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-spacer/>
+      <v-btn @click="getPayments" icon :loading="loading">
+        <v-icon>refresh</v-icon>
+      </v-btn>
+
     </v-card-title>
     <v-data-table
       :search="search"
@@ -77,10 +83,7 @@
       :items="payments"
       :items-per-page="5"
       class="elevation-1"
-      show-select
-      single-select
       item-key="code"
-      v-model="selected"
       loading-text="A carregar ..."
       :loading="loading"
     >
@@ -116,39 +119,46 @@
           {text: 'Quantidade', value: 'quantity'},
           {text: 'Estado', value: 'status'},
           {text: 'Recibo', value: 'receipt'},
+          {text: 'Ações', value: 'action'},
         ],
         payments: [],
-        selected: undefined,
         loading: true,
         search: '',
+        dialog: false,
+        title: 'Criar Pagamento',
       }
     },
     methods: {
       deletePayment(item) {
-        console.log(this.selected[0]);
+
       },
       viewPayment(item) {
 
+      },
+      getPayments() {
+        this.loading = true;
+        //this.payments = [];
+
+        this.$axios.get('/api/payments').then((response) => {
+          response.data.forEach((p) => {
+            let date = new Date(0);
+            date.setUTCSeconds(p.timestamp);
+            p.date = date.toUTCString();
+
+            if (p.status == 'PAID') {
+              p.status = "Pago";
+            } else {
+              p.status = "Não Pago";
+            }
+          });
+
+          this.payments = response.data;
+          this.loading = false;
+        });
       }
     },
     mounted() {
-      this.$axios.get('/api/payments').then((response) => {
-
-        response.data.forEach((p) => {
-          let date = new Date(0);
-          date.setUTCSeconds(p.timestamp);
-          p.date = date.toUTCString();
-
-          if (p.status == 'PAID') {
-            p.status = "Pago";
-          } else {
-            p.status = "Não Pago";
-          }
-        });
-
-        this.payments = response.data;
-        this.loading = false;
-      });
+      this.getPayments();
     }
   }
 </script>
