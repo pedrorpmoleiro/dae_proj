@@ -75,7 +75,7 @@ public class PaymentBean {
             throw new MyEntityNotFoundException("ERROR_FINDING_PRODUCT");
         }
 
-        payment = new Payment(code, socio, product, new Date(timestamp), quantity, price, status, receipt);
+        payment = new Payment(code, socio, product, new Date(timestamp * 1000), quantity, price, status, receipt);
 
         em.persist(payment);
 
