@@ -9,9 +9,10 @@
         label="Search"
         single-line
         hide-details
-      ></v-text-field>
+      />
     </v-card-title>
     <v-data-table
+      :search="search"
       :headers="headers"
       :items="payments"
       :items-per-page="5"
@@ -22,7 +23,23 @@
       v-model="selected"
       loading-text="A carregar ..."
       :loading="loading"
-    />
+    >
+      <template v-slot:item.action="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="viewPayment(item)"
+        >
+          edit
+        </v-icon>
+        <v-icon
+          small
+          @click="deletePayment(item)"
+        >
+          delete
+        </v-icon>
+      </template>
+    </v-data-table>
   </v-container>
 </template>
 
@@ -46,6 +63,14 @@
         search: '',
       }
     },
+    methods: {
+      deletePayment(item) {
+        console.log(this.selected[0]);
+      },
+      viewPayment(item) {
+
+      }
+    },
     mounted() {
       this.$axios.get('/api/payments').then((response) => {
 
@@ -53,6 +78,12 @@
           let date = new Date(0);
           date.setUTCSeconds(p.timestamp);
           p.date = date.toUTCString();
+
+          if (p.status == 'PAID') {
+            p.status = "Pago";
+          } else {
+            p.status = "Não Pago";
+          }
         });
 
         this.payments = response.data;
