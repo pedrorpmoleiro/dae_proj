@@ -12,8 +12,8 @@ import java.time.Instant;
 @Startup
 @Singleton(name = "ConfigEJB")
 public class ConfigBean {
-    @EJB
-    private ModalidadeBean modalidadeBean;
+    //@EJB
+    //private ModalidadeBean modalidadeBean;
     @EJB
     private AdministradorBean administradorBean;
     @EJB
@@ -27,15 +27,12 @@ public class ConfigBean {
     //@EJB
     //private EscalaoBean escalaoBean;
 
-    public ConfigBean() {
-    }
-
     @PostConstruct
     public void populateDB() {
         try {
             //MODALIDADES
-            modalidadeBean.create("BASQUETBALL");
-            modalidadeBean.create("FOOTEBOLL");
+            //modalidadeBean.create("BASQUETBALL");
+            //modalidadeBean.create("FOOTEBOLL");
 
             // ESCALOES
             //escalaoBean.create("SUB20", "BASQUETBALL");
