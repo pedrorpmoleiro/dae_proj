@@ -20,7 +20,8 @@ public class Atleta extends Socio implements Serializable {
         public Atleta() {
         }
 
-    public Atleta(long idSocio, String password, String name, String email) {
-        super(idSocio, password, name, email);
+    public Atleta( String username,String password, String name, String email) {
+        super( username,password, name, email);
+        setTipo(SocioType.ATLETA);
     }
 }

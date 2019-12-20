@@ -1,16 +1,22 @@
 package entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllSocios",
+                query = "SELECT s FROM Socio s ORDER BY s.idSocio" // JPQL
+        )
+})
 @Table(name="SOCIOS")
-public abstract class Socio {
+public class Socio {
     @Id
+    private String username;
+    @GeneratedValue (strategy=GenerationType.SEQUENCE)
     private long idSocio;
     @NotNull
     private String password;
@@ -22,15 +28,34 @@ public abstract class Socio {
             + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
             message = "{invalid.email}")
     private String email;
+    @NotNull
+    private SocioType tipo;
 
-    public Socio(long idSocio, String password, String name, String email) {
-        this.idSocio = idSocio;
+    public Socio(String username,String password, String name, String email) {
         this.password = password;
         this.name = name;
         this.email = email;
+        this.username = username;
+        this.tipo = SocioType.NORMAL;
     }
 
     public Socio() {
+    }
+
+    public SocioType getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(SocioType tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public long getIdSocio() {
