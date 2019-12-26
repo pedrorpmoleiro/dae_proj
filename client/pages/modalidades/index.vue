@@ -11,7 +11,8 @@
                         hide-details
                 ></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="items" :items-per-page="5" :search="search" class="elevation-1"   show-expand>
+            <v-data-table :headers="headers" item-key="nome" :items="items" :items-per-page="5" :search="search"
+                          class="elevation-1" :single-expand="singleExpand" :expanded.sync="expanded" show-expand>
                 <template v-slot:top>
                     <v-toolbar flat color="dark">
                         <v-toolbar-title>Informação</v-toolbar-title>
@@ -46,11 +47,12 @@
                         </v-card>
                     </v-dialog>
                 </template>
-                <template v-slot:expanded-item="{headers }">
+                <template v-slot:expanded-item="{headers}">
                     <v-card class="mx-auto" max-width="344">
-                        <v-card-text>
-                            <div>Escaloes Information</div>
-                        </v-card-text>
+                        <v-card-subtitle>
+                            Escaloes Information
+                        </v-card-subtitle>
+
                     </v-card>
                 </template>
                 <template v-slot:item.action="{ item }">
@@ -69,19 +71,21 @@
             return {
                 dialog: false,
                 items: [],
-                headers: [{text: 'Nome', align: 'left', sortable: false, value: 'nome'}, { text: '', value: 'data-table-expand' },{
-                    text: 'Acciones',
-                    value: 'action',
-                    sortable: false
-                }],
+                headers: [
+                    {text: 'Nome', align: 'left', sortable: false, value: 'nome'},
+                    {text: '', value: 'data-table-expand'},
+                    {text: 'Acciones', value: 'action', sortable: false}
+                ],
                 editItem: {
                     nome: ''
                 },
-                search:''
+                search: '',
+                singleExpand: true,
+                expanded: []
             }
         },
         created() {
-           this.getModalidades();
+            this.getModalidades();
         },
         methods: {
             close() {
@@ -97,21 +101,21 @@
                     headers: {'Content-Type': 'application/json'}
                 })
                     .then(e => {
-                           this.getModalidades();
+                            this.getModalidades();
                         }
                     )
             },
-            deleteItem(item){
-               item.nome
-                confirm('Are you sure you want to delete this item?')&&
-                this.$axios({method:'delete',url:'/api/modalidades/'+item.nome})
-                    .then(e=>{
+            deleteItem(item) {
+                item.nome
+                confirm('Are you sure you want to delete this item?') &&
+                this.$axios({method: 'delete', url: '/api/modalidades/' + item.nome})
+                    .then(e => {
                         console.log('Delete')
                         this.getModalidades();
 
                     })
             },
-            getModalidades(){
+            getModalidades() {
                 this.$axios.get("/api/modalidades")
                     .then(r => {
                         this.items = r.data;

@@ -18,9 +18,9 @@ public class ModalidadeBean {
     EntityManager em;
     public void create(String nome){
             try {
-                Modalidade modalidade= em.find(Modalidade.class,nome);
+                Modalidade modalidade= em.find(Modalidade.class,nome.toUpperCase());
                 if(modalidade==null){
-                    modalidade=new Modalidade(nome);
+                    modalidade=new Modalidade(nome.toUpperCase());
                     em.persist(modalidade);
                 }
 

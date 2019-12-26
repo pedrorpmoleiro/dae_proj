@@ -19,20 +19,23 @@ public class Modalidade implements Serializable {
    @ManyToMany(mappedBy = "modalidades")
     private Set<Treinador> treinadores;
     */
-
-    private String nome;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private  long id;
-
+    private String nome;
     @OneToMany(mappedBy = "modalidade", cascade = CascadeType.REMOVE)
     private Set<Escalao> escaloes;
+    @ManyToMany
+    @JoinTable(name = "EPOCA_MODALIDADE",
+            joinColumns = @JoinColumn(name = "MODALIDADE_NOME",referencedColumnName = "CODE"),
+            inverseJoinColumns
+                    = @JoinColumn(name = "EPOCA_NOME",referencedColumnName = "USERNAME"))
+    private Set<Epoca> epocas;
 
     public Modalidade(String nome) {
         //  this.socios = new LinkedList<Socio>();
         //   this.treinadores = new LinkedHashSet<>();
         this.nome = nome;
         this.escaloes = new LinkedHashSet<>();
+        this.epocas=new LinkedHashSet<>();
     }
 
     public Modalidade() {
@@ -56,7 +59,13 @@ public class Modalidade implements Serializable {
         this.escaloes = escaloes;
     }
 
+    public Set<Epoca> getEpocas() {
+        return epocas;
+    }
 
+    public void setEpocas(Set<Epoca> epocas) {
+        this.epocas = epocas;
+    }
 //----------------------------------------ESCALAO---------------------------------
 
     public void addEscalao(Escalao esc) {
@@ -68,6 +77,17 @@ public class Modalidade implements Serializable {
     public void removeEscalao(Escalao esc) {
         if (escaloes.contains(esc)) {
             escaloes.remove(esc);
+        }
+    }
+    //------------------------------EPOCA--------------------------------------
+    public void addEpoca(Epoca epoca) {
+        if (!epocas.contains(epoca)) {
+            epocas.add(epoca);
+        }
+    }
+    public void removeEpoca(Epoca epoca) {
+        if (epocas.contains(epoca)) {
+            epocas.remove(epoca);
         }
     }
 }
