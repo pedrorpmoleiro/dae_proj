@@ -6,10 +6,12 @@ import entities.Product;
 import entities.Socio;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
+import exceptions.MyIllegalArgumentException;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.LinkedList;
@@ -78,6 +80,67 @@ public class PaymentBean {
         payment = new Payment(code, socio, product, new Date(timestamp * 1000), quantity, price, status, receipt);
 
         em.persist(payment);
+
+        return payment;
+    }
+
+    public Payment update(int code, String socio_username, int product_code, long timestamp, int quantity,
+                          double price, PaymentStatus status, String receipt)
+            throws MyEntityNotFoundException, MyIllegalArgumentException {
+
+        Payment payment = em.find(Payment.class, code);
+
+        if (payment == null) {
+            throw new MyEntityNotFoundException("ERROR_PAYMENT_NOT_FOUND");
+        }
+
+        if (payment.isDeleted()) {
+            throw new MyIllegalArgumentException("Payment has been removed and cannot be edited");
+        }
+
+        Socio socio = em.find(Socio.class, socio_username);
+
+        if (socio == null) {
+            throw new MyEntityNotFoundException("ERROR_SOCIO_NOT_FOUND");
+        }
+
+        Product product = em.find(Product.class, product_code);
+
+        if (product == null) {
+            throw new MyEntityNotFoundException("ERROR_PRODUCT_NOT_FOUND");
+        }
+
+        em.lock(payment, LockModeType.PESSIMISTIC_WRITE);
+
+        payment.setSocio(socio);
+        payment.setProduct(product);
+        payment.setDateTime(new Date(timestamp));
+        payment.setQuantity(quantity);
+        payment.setPrice(price);
+        payment.setStatus(status);
+        payment.setReceipt(receipt);
+
+        em.lock(payment, LockModeType.NONE);
+
+        return payment;
+    }
+
+    public Payment delete(int code) throws MyEntityNotFoundException {
+        Payment payment = em.find(Payment.class, code);
+
+        if (payment == null) {
+            throw new MyEntityNotFoundException("ERROR_PAYMENT_NOT_FOUND");
+        }
+
+        if (payment.isDeleted()) {
+            return payment;
+        }
+
+        em.lock(payment, LockModeType.PESSIMISTIC_WRITE);
+
+        payment.setDeleted(true);
+
+        em.lock(payment, LockModeType.NONE);
 
         return payment;
     }
