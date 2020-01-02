@@ -1,8 +1,10 @@
 <template>
     <div>
-        <nuxt-link to="/utilizadores">Voltar</nuxt-link>
+        <v-btn class="ma-2" color="blue darken-2" to="/utilizadores" dark>
+            <v-icon dark left>mdi-arrow-left</v-icon>Back
+        </v-btn>
         <h1>Create a new Socio</h1>
-        <form ref="form" @submit.prevent="create" :disabled="!isFormValid" v-model="isFormValid" lazy-validation>
+        <form ref="form" @submit.prevent="create" :disabled="!isFormValid" lazy-validation>
             <v-text-field
                     v-model.trim="name"
                     :counter="30"
@@ -16,6 +18,7 @@
                     type="email"
                     :rules="emailRules"
                     label="E-mail"
+                    ref="email"
                     required
             ></v-text-field>
             <v-text-field
@@ -43,7 +46,7 @@
                     :disabled="!isFormValid"
                     color="success"
                     class="mr-4"
-                    @click="addSocio"
+                    @click="create"
             >
                 Adicionar
             </v-btn>
@@ -90,7 +93,7 @@ your e-mail"/>-->
                 name: null,
                 nameRules: [
                     v => !!v || 'Name is required',
-                    v => (v && v.length <= 30) || 'Name must be less than 30 characters',
+                    v => (v && v.length <= 30 && v.length >= 3) || 'Name must be less than 30 characters and more than 3',
                 ],
                 email: null,
                 emailRules: [
@@ -104,97 +107,154 @@ your e-mail"/>-->
                     'ATLETA',
                     'SOCIO SIMPLE',
                 ],
-                errorMsg: false,
-                isFormValid: true,
+                usernameRules: [
+                    v => !!v || 'UserName is required',
+                    v => (v && v.length <= 35 && v.length >= 4) || 'UserName must be less than 35 characters and more than 4',
+                ],
+                passwordRules: [
+                    v => !!v || 'Password is required',
+                    v => (v && v.length <= 20 && v.length >= 6) || 'Password must be less than 20 characters and more than 6 characters',
+                ],
+                errorMsg: false
             }
         },
         /*created() {
             this.$axios.$get('/api/courses').then(courses => {
                 this.courses = courses
             })
-        }, computed: {
-            isUsernameValid() {
-                if (!this.username) {
-                    return null
-                }
-                let usernameLen = this.username.length
-                if (usernameLen < 3 || usernameLen > 15) {
-                    return false
-                }
-                return true
-            },
-            isPasswordValid() {
-                if (!this.password) {
-                    return null
-                }
-                let passwordLen = this.password.length
-                if (passwordLen < 3 || passwordLen > 255) {
-                    return false
-                }
-                return true
-            },
-            isNameValid() {
-                if (!this.name) {
-                    return null
-                }
-                let nameLen = this.name.length
-                if (nameLen < 3 || nameLen > 25) {
-                    return false
-                }
-                return true
-            },
-            isEmailValid() {
-                if (!this.email) {
-                    return null
-                }
-
-                return this.$refs.email.checkValidity()
-            },
-            isCourseValid() {
-                if (!this.courseCode) {
-                    return null
-                }
-                return this.courses.some(course => this.courseCode === course.code)
-            },
-            isFormValid() {
-                if (!this.isUsernameValid) {
-                    return false
-                }
-                if (!this.isPasswordValid) {
-                    return false
-                }
-                if (!this.isNameValid) {
-                    return false
-                }
-                if (!this.isEmailValid) {
-                    return false
-                }
-                if (!this.isCourseValid) {
-                    return false
-                }
-                return true
+        }, */
+        computed: {
+        isUsernameValid() {
+            if (!this.username) {
+                return null
             }
-        },*/
+            let usernameLen = this.username.length
+            if (usernameLen < 4 || usernameLen > 35) {
+                return false
+            }
+            return true
+        },
+        isPasswordValid() {
+            if (!this.password) {
+                return null
+            }
+            let passwordLen = this.password.length
+            if (passwordLen < 6 || passwordLen > 20) {
+                return false
+            }
+            return true
+        },
+        isNameValid() {
+            if (!this.name) {
+                return null
+            }
+            let nameLen = this.name.length
+            if (nameLen < 3 || nameLen > 30) {
+                return false
+            }
+            return true
+        },
+        isEmailValid() {
+            if (!this.email) {
+                return null;
+            }
+
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(this.email);
+        },
+        isTypeValid() {
+            if (!this.tipo) {
+                return false
+            }
+            //return true;
+            return this.items.includes(this.tipo);
+        },
+        isFormValid() {
+            if (!this.isUsernameValid) {
+                return false
+            }
+            if (!this.isPasswordValid) {
+                return false
+            }
+            if (!this.isNameValid) {
+                return false
+            }
+            if (!this.isEmailValid) {
+                return false
+            }
+            if (!this.isTypeValid) {
+                return false
+            }
+            return true
+        }
+    },
         methods: {
             reset () {
                 this.$refs.form.reset()
             },
             create() {
-                if (this.$refs.form.validate()) {
-                    this.$axios.$post('/api/students', {
-                        username: this.username,
-                        password: this.password,
-                        name: this.name,
-                        email: this.email,
-                        courseCode: this.courseCode
-                    })
-                        .then(() => {
-                            this.$router.push('/students')
-                        })
-                        .catch(error => {
-                            this.errorMsg = error.response.data
-                        })
-                }
+                    switch (this.tipo) {
+                        case 'ADMINISTRADOR':
+                            this.$axios.$post('/api/users/administradores', {
+                                username: this.username,
+                                password: this.password,
+                                name: this.name,
+                                email: this.email,
+                            })
+                                .then(() => {
+                                    this.$router.push('/utilizadores')
+                                })
+                                .catch(error => {
+                                    this.errorMsg = error.response.data
+                                })
+
+                            break;
+                        case 'TREINADOR':
+                            this.$axios.$post('/api/users/treinadores', {
+                                username: this.username,
+                                password: this.password,
+                                name: this.name,
+                                email: this.email,
+                            })
+                                .then(() => {
+                                    this.$router.push('/utilizadores')
+                                })
+                                .catch(error => {
+                                    this.errorMsg = error.response.data
+                                })
+                                break;
+                        case 'ATLETA':
+                            this.$axios.$post('/api/users/atletas', {
+                                username: this.username,
+                                password: this.password,
+                                name: this.name,
+                                email: this.email,
+                            })
+                                .then(() => {
+                                    this.$router.push('/utilizadores')
+                                })
+                                .catch(error => {
+                                    this.errorMsg = error.response.data
+                                })
+                            break;
+                        case 'SOCIO SIMPLE':
+                            this.$axios.$post('/api/users', {
+                                username: this.username,
+                                password: this.password,
+                                name: this.name,
+                                email: this.email,
+                            })
+                                .then(() => {
+                                    this.$router.push('/utilizadores')
+                                })
+                                .catch(error => {
+                                    this.errorMsg = error.response.data
+                                })
+                            break;
+                        default:
+                            this.errorMsg = "Error : Type undefined";
+                            break;
+                    }
             }
         }
     }
