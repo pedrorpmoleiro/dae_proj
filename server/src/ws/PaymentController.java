@@ -1,14 +1,14 @@
 package ws;
 
 import dtos.PaymentDTO;
+import dtos.ProductDTO;
 import ejbs.PaymentBean;
 import entities.Payment;
+import exceptions.MyEntityExistsException;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJB;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -42,5 +42,22 @@ public class PaymentController {
     @Path("/")
     public Response all() {
         return Response.status(Response.Status.OK).entity(toDTOs(paymentBean.all())).build();
+    }
+
+    @POST
+    @Path("/")
+    public Response create (PaymentDTO paymentDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+        paymentBean.create(
+                paymentDTO.getCode(),
+                paymentDTO.getSocioUsername(),
+                paymentDTO.getProductCode(),
+                paymentDTO.getTimestamp(),
+                paymentDTO.getQuantity(),
+                paymentDTO.getPrice(),
+                paymentDTO.getStatus(),
+                paymentDTO.getReceipt()
+        );
+
+        return Response.status(Response.Status.CREATED).build();
     }
 }

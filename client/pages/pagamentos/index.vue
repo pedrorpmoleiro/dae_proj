@@ -19,43 +19,36 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ title }}</span>
+            <span class="headline">Criar Pagamento</span>
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field label="Legal first name*" required/>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field label="Legal middle name" hint="example of helper text only on focus"/>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    label="Legal last name*"
-                    hint="example of persistent helper text"
-                    persistent-hint
-                    required
-                  />
+                <v-col cols="12">
+                  <v-text-field label="Código do Pagamento*" type="number" required/>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field label="Email*" required/>
+                  <v-text-field label="Preço*" suffix="€" type="number" required/>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field label="Password*" type="password" required/>
+                  <v-text-field label="Código do Produto*" type="number" required/>
                 </v-col>
-                <v-col cols="12" sm="6">
-                  <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
-                    label="Age*"
-                    required
-                  />
+                <v-col cols="12">
+                  <v-text-field label="Quantidade*" type="number" required/>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Recibo*" required/>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Nome de usuário do sócio*" required/>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Data e Hora*" type="date" required/>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-autocomplete
                     :items="['Pago', 'Não Pago']"
                     label="Estado"
-                    multiple
                   />
                 </v-col>
               </v-row>
@@ -125,7 +118,6 @@
         loading: true,
         search: '',
         dialog: false,
-        title: 'Criar Pagamento',
       }
     },
     methods: {
