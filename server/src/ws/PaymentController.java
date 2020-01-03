@@ -85,10 +85,10 @@ public class PaymentController {
     }
 
     @DELETE
-    @Path("/")
-    public Response delete (PaymentDTO paymentDTO) throws MyEntityNotFoundException
+    @Path("{code}/delete")
+    public Response delete (@PathParam("code") int code) throws MyEntityNotFoundException
     {
-        Payment payment = paymentBean.delete(paymentDTO.getCode());
+        Payment payment = paymentBean.delete(code);
 
         return Response.status(Response.Status.OK).entity(toDTO(payment)).build();
     }
