@@ -30,14 +30,26 @@ public class TreinadorBean {
             System.out.println("Server error");
         }
     }
+/*
+    public void remove(String username)throws MyEntityExistsException {
 
-    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException {
+        try {
+            Treinador treinador = em.find(Treinador.class, username);
+            if (treinador != null) {
+                treinador.setDelete(true);
+                em.persist(treinador);
+            } else {
+                throw new MyEntityExistsException("Error: treinador dont exists");
+            }
+        }catch (Exception e){
+            System.out.println("Server error");
+        }
+    }
+    public void update(String username, String name, String email) throws MyEntityNotFoundException {
         Treinador treinador = em.find(Treinador.class, username);
         if (treinador != null) {
             em.lock(treinador, LockModeType.OPTIMISTIC);
 
-            treinador.setUsername(username);
-            treinador.setPassword(password);
             treinador.setName(name);
             treinador.setEmail(email);
 
@@ -45,7 +57,7 @@ public class TreinadorBean {
         }else{
             throw new MyEntityNotFoundException("Treinador not found");
         }
-    }
+    }*/
 
     public List<Treinador> all() {
         try {

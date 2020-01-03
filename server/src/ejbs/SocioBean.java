@@ -31,22 +31,37 @@ public class SocioBean {
             System.out.println("Server error");
         }
     }
-/*
-    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException {
-        Administrador administrador = em.find(Administrador.class, username);
-        if (administrador != null) {
-            em.lock(administrador, LockModeType.OPTIMISTIC);
 
-            administrador.setUsername(username);
-            administrador.setPassword(password);
-            administrador.setName(name);
-            administrador.setEmail(email);
+    public boolean remove(String username)throws MyEntityExistsException {
 
-            em.persist(administrador);
-        }else{
-            throw new MyEntityNotFoundException("Admin not found");
+        try {
+            Socio socio = em.find(Socio.class, username);
+            if (socio != null) {
+                socio.setDelete(true);
+                em.persist(socio);
+                return true;
+            } else {
+                throw new MyEntityExistsException("Error: User dont exists");
+            }
+        }catch (Exception e){
+            System.out.println("Server error");
         }
-    }*/
+        return false;
+    }
+    public void update(String username, String name, String email) throws MyEntityNotFoundException{
+        Socio socio = em.find(Socio.class, username);
+        if (socio != null) {
+            em.lock(socio, LockModeType.PESSIMISTIC_WRITE);
+
+            socio.setName(name);
+            socio.setEmail(email);
+
+            em.persist(socio);
+        }else{
+            throw new MyEntityNotFoundException("Socio not found");
+        }
+    }
+
 
     public List<Socio> all() {
         try {

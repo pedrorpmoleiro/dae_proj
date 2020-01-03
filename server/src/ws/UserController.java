@@ -13,6 +13,7 @@ import entities.Atleta;
 import entities.Socio;
 import entities.Treinador;
 import exceptions.MyEntityExistsException;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -71,6 +72,28 @@ public class UserController {
         return Response.status(Response.Status.CREATED).build();
     }
 
+    @PUT
+    @Path("/{username}")
+    public Response updateSocio(@PathParam("username") String username,SocioDTO socioDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        socioBean.update(
+                username,
+                socioDTO.getName(),
+                socioDTO.getEmail());
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
+
+    @DELETE
+    @Path("/{username}")
+    public Response removeSocio(@PathParam("username") String username) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        if(socioBean.remove(username)){
+            return Response.status(Response.Status.OK).build();
+        }
+        return  Response.status(Response.Status.EXPECTATION_FAILED).build();
+
+    }
 //********************Administrador *****************
     // Converts an entity to a DTO class
     AdministradorDTO toDTO(Administrador administrador) {
@@ -115,6 +138,26 @@ public class UserController {
         return Response.status(Response.Status.OK).entity(toDTO(administrador)).build();
     }
 
+    /*@PUT
+    @Path("/administradores/{username}")
+    public Response updateAdministrador(@PathParam("username") String username,AdministradorDTO administradorDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        administradorBean.update(
+                username,
+                administradorDTO.getName(),
+                administradorDTO.getEmail());
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }*/
+/*
+    @DELETE
+    @Path("/administradores/{username}")
+    public Response removeAdministrador(@PathParam("username") String username) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        administradorBean.remove(username);
+
+        return Response.status(Response.Status.OK).build();
+    }*/
 
     //**********************************Atletas**********************************
 
@@ -159,6 +202,27 @@ public class UserController {
 
         return Response.status(Response.Status.OK).entity(toDTO(atleta)).build();
     }
+   /* @PUT
+    @Path("/atletas/{username}")
+    public Response updateAtletas(@PathParam("username") String username,AtletaDTO atletaDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        administradorBean.update(
+                username,
+                atletaDTO.getName(),
+                atletaDTO.getEmail());
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }*/
+/*
+    @DELETE
+    @Path("/atletas/{username}")
+    public Response removeAtleta(@PathParam("username") String username) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        atletaBean.remove(username);
+
+        return Response.status(Response.Status.OK).build();
+    }*/
+
     //**********************************Treinador**********************************
 
     // Converts an entity to a DTO class
@@ -202,4 +266,26 @@ public class UserController {
 
         return Response.status(Response.Status.OK).entity(toDTO(treinador)).build();
     }
+
+  /*  @PUT
+    @Path("/treinadores/{username}")
+    public Response updateTreinadores(@PathParam("username") String username,TreinadorDTO treinadorDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        administradorBean.update(
+                username,
+                treinadorDTO.getName(),
+                treinadorDTO.getEmail());
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }*/
+/*
+    @DELETE
+    @Path("/treinadores/{username}")
+    public Response removeTreinador(@PathParam("username") String username) throws MyEntityExistsException, MyEntityNotFoundException {
+
+        treinadorBean.remove(username);
+
+        return Response.status(Response.Status.OK).build();
+    }*/
+
 }

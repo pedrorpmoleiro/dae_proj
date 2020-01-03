@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllTreinadores",
-                query = "SELECT t FROM Treinador t ORDER BY t.idSocio" // JPQL
+                query = "SELECT t FROM Treinador t WHERE t.delete=false  ORDER BY t.idSocio" // JPQL
         )
 })
 
