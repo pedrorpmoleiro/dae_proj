@@ -76,9 +76,9 @@ public class ProductController {
     }
 
     @DELETE
-    @Path("/")
-    public Response delete (ProductDTO productDTO) throws MyEntityNotFoundException {
-        Product product = productBean.delete(productDTO.getCode());
+    @Path("{code}/delete")
+    public Response delete (@PathParam("code") int code) throws MyEntityNotFoundException {
+        Product product = productBean.delete(code);
 
         return Response.status(Response.Status.OK).entity(toDTO(product)).build();
     }

@@ -2,20 +2,18 @@ package ejbs;
 
 import entities.PaymentStatus;
 import entities.ProductType;
-import exceptions.MyEntityExistsException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import java.time.Instant;
-import java.util.Date;
 
 @Startup
 @Singleton(name = "ConfigEJB")
 public class ConfigBean {
-    @EJB
-    private ModalidadeBean modalidadeBean;
+    //@EJB
+    //private ModalidadeBean modalidadeBean;
     @EJB
     private AdministradorBean administradorBean;
     @EJB
@@ -26,24 +24,27 @@ public class ConfigBean {
     private ProductBean productBean;
     @EJB
     private PaymentBean paymentBean;
-
-    public ConfigBean() {
-    }
+    //@EJB
+    //private EscalaoBean escalaoBean;
 
     @PostConstruct
     public void populateDB() {
         try {
-            modalidadeBean.create("BASQUETBALL");
-            modalidadeBean.create("FOOTEBOLL");
+            //MODALIDADES
+            //modalidadeBean.create("BASQUETBALL");
+            //modalidadeBean.create("FOOTEBOLL");
+
+            // ESCALOES
+            //escalaoBean.create("SUB20", "BASQUETBALL");
+            //escalaoBean.create("SUB22", "BASQUETBALL");
+            //escalaoBean.create("SUB19", "BASQUETBALL");
 
             /* Admins */
-
             administradorBean.create("kenalx1999", "123123", "kevin", "kevin@gmail.com");
             administradorBean.create("chaca", "123123", "andres", "andres@gmail.com");
             administradorBean.create("pedrinsky", "123123", "pedro", "pedro@gmail.com");
 
             /* Treinador */
-
             treinadorBean.create("lucho", "456456", "luis", "luis@gmail.com");
             treinadorBean.create("mateo", "456456", "mateo", "mateo@gmail.com");
 
