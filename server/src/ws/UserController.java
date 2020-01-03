@@ -94,6 +94,33 @@ public class UserController {
         return  Response.status(Response.Status.EXPECTATION_FAILED).build();
 
     }
+
+    @GET
+    @Path("/{username}")
+    public Response getSocioDetails(@PathParam("username") String username) {
+        Socio socio = socioBean.findSocio(username);
+
+        if(socio != null){
+        return Response.status(Response.Status.OK).entity(toDTO(socio)).build();
+        }
+        return  Response.status(Response.Status.EXPECTATION_FAILED).build();
+    }
+
+    //LOGIN
+
+    @POST
+    @Path("/login")
+    public Response loginSocio(SocioDTO socioDTO) throws MyEntityExistsException {
+        Socio socio = socioBean.findSocio(socioDTO.getUsername());
+        if(socio != null){
+            if(socio.getPassword() == socioDTO.getPassword()){
+                return Response.status(Response.Status.OK).entity(toDTO(socio)).build();
+            }
+        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
+    }
+
 //********************Administrador *****************
     // Converts an entity to a DTO class
     AdministradorDTO toDTO(Administrador administrador) {
@@ -129,7 +156,7 @@ public class UserController {
 
         return Response.status(Response.Status.CREATED).build();
     }
-
+/*
     @GET
     @Path("/administradores/{username}")
     public Response getAdministradorDetails(@PathParam("username") String username) {
@@ -137,7 +164,7 @@ public class UserController {
 
         return Response.status(Response.Status.OK).entity(toDTO(administrador)).build();
     }
-
+*/
     /*@PUT
     @Path("/administradores/{username}")
     public Response updateAdministrador(@PathParam("username") String username,AdministradorDTO administradorDTO) throws MyEntityExistsException, MyEntityNotFoundException {
@@ -194,14 +221,14 @@ public class UserController {
 
         return Response.status(Response.Status.CREATED).build();
     }
-
+/*
     @GET
     @Path("/atletas/{username}")
     public Response getAtletasDetails(@PathParam("username") String username) {
         Atleta atleta = atletaBean.findAtleta(username);
 
         return Response.status(Response.Status.OK).entity(toDTO(atleta)).build();
-    }
+    }*/
    /* @PUT
     @Path("/atletas/{username}")
     public Response updateAtletas(@PathParam("username") String username,AtletaDTO atletaDTO) throws MyEntityExistsException, MyEntityNotFoundException {
@@ -258,14 +285,14 @@ public class UserController {
 
         return Response.status(Response.Status.CREATED).build();
     }
-
+/*
     @GET
     @Path("/treinadores/{username}")
     public Response getTreinadoresDetails(@PathParam("username") String username) {
         Treinador treinador = treinadorBean.findTreinador(username);
 
         return Response.status(Response.Status.OK).entity(toDTO(treinador)).build();
-    }
+    }*/
 
   /*  @PUT
     @Path("/treinadores/{username}")
