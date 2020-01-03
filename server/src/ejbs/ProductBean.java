@@ -88,12 +88,15 @@ public class ProductBean {
             throw new MyEntityNotFoundException("Product Not Found");
         }
 
+        if (product.isDeleted()) {
+            return product;
+        }
+
         em.lock(product, LockModeType.PESSIMISTIC_READ);
 
         product.setDeleted(true);
 
         em.lock(product, LockModeType.NONE);
-
 
         return product;
     }
