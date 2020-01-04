@@ -78,6 +78,7 @@ public class ConfigBean {
             productBean.create(2, ProductType.ARTIGO, "123", 124.0);
             productBean.create(3, ProductType.INSCRICAO, "123", 424.0);
 
+            // MODALIDADE
             modalidadeBean.enrollAtletaEscalao("SUB20","mario","2018-2019","BASQUETBALL");
             modalidadeBean.enrollTreinadorEscalao("SUB20","lucho","2018-2019","BASQUETBALL");
 
@@ -89,15 +90,12 @@ public class ConfigBean {
             paymentBean.create(3, "mateo", 2, Instant.now().getEpochSecond(), 6, 2400.0,
                     PaymentStatus.PARCIAL, "RECEIPT");
 
-            // MODALIDADE
-            modalidadeBean.enrollAtletaEscalao("SUB20","mario","2018-2019","BASQUETBALL");
-            modalidadeBean.enrollTreinadorEscalao("SUB20","mateo","2018-2019","BASQUETBALL");
-
             // ESCALAO
             escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
 
             // HORARIO
-            horarioBean.createAssiduidade("profe1","SUB20","2018-2019",TipoDia.valueOf("SEGUNDA_FEIRA"),10,12,"kevin20",true);
+            horarioBean.createAssiduidade("lucho","SUB20","2018-2019",TipoDia.valueOf("SEGUNDA_FEIRA"),10,12,"mario",true);
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
