@@ -64,7 +64,7 @@
                      placeholder="Enter your password"/>
             <b-input v-model.trim="name" :state="isNameValid" required
                      placeholder="Enter your name"/>
-            <b-input ref="email" v-model.trim="email" type="email"
+            <b-input ref="username" v-model.trim="username" type="username"
                      :state="isEmailValid" required pattern=".+@my.ipleiria.pt" placeholder="Enter
 your e-mail"/>-->
          <!--   <b-select v-model="courseCode" :options="courses"
@@ -85,6 +85,7 @@ your e-mail"/>-->
 </template>
 
 <script>
+    const crypto = require('crypto');
     export default {
         data() {
             return {
@@ -95,7 +96,7 @@ your e-mail"/>-->
                     v => !!v || 'Name is required',
                     v => (v && v.length <= 30 && v.length >= 3) || 'Name must be less than 30 characters and more than 3',
                 ],
-                email: null,
+                username: null,
                 emailRules: [
                     v => !!v || 'E-mail is required',
                     v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -155,12 +156,12 @@ your e-mail"/>-->
             return true
         },
         isEmailValid() {
-            if (!this.email) {
+            if (!this.username) {
                 return null;
             }
 
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(this.email);
+            return re.test(this.username);
         },
         isTypeValid() {
             if (!this.tipo) {
@@ -193,13 +194,16 @@ your e-mail"/>-->
                 this.$refs.form.reset()
             },
             create() {
+                const hash = crypto.createHash('sha256');
+                hash.update(this.password);
+                var passwordHash = hash.digest('base64');
                     switch (this.tipo) {
                         case 'ADMINISTRADOR':
                             this.$axios.$post('/api/users/administradores', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
-                                email: this.email,
+                                username: this.username,
                             })
                                 .then(() => {
                                     this.$router.push('/utilizadores')
@@ -212,9 +216,9 @@ your e-mail"/>-->
                         case 'TREINADOR':
                             this.$axios.$post('/api/users/treinadores', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
-                                email: this.email,
+                                username: this.username,
                             })
                                 .then(() => {
                                     this.$router.push('/utilizadores')
@@ -226,9 +230,9 @@ your e-mail"/>-->
                         case 'ATLETA':
                             this.$axios.$post('/api/users/atletas', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
-                                email: this.email,
+                                username: this.username,
                             })
                                 .then(() => {
                                     this.$router.push('/utilizadores')
@@ -240,9 +244,9 @@ your e-mail"/>-->
                         case 'SOCIO SIMPLE':
                             this.$axios.$post('/api/users', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
-                                email: this.email,
+                                username: this.username,
                             })
                                 .then(() => {
                                     this.$router.push('/utilizadores')

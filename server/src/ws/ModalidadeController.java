@@ -80,7 +80,7 @@ public class ModalidadeController {
     //endregion
     //region ATLETA
     AtletaDTO toAtletaDTO(Atleta atleta){
-        return  new AtletaDTO(atleta.getIdSocio(),atleta.getUsername(),atleta.getPassword(),atleta.getName(),atleta.getEmail());
+        return  new AtletaDTO(atleta.getIdSocio(),atleta.getUsername(),atleta.getName(),atleta.getEmail());
     }
     Set<AtletaDTO> toAtletaDTOs(Set<Atleta> atletas){
         return atletas.stream().map(this::toAtletaDTO).collect(Collectors.toSet());
@@ -88,7 +88,7 @@ public class ModalidadeController {
     //endregion
     //region ATLETA
     TreinadorDTO toTreinadorDTO(Treinador treinador){
-        return  new TreinadorDTO(treinador.getIdSocio(),treinador.getUsername(),treinador.getPassword(),treinador.getName(),treinador.getEmail());
+        return  new TreinadorDTO(treinador.getIdSocio(),treinador.getUsername(),treinador.getName(),treinador.getEmail());
     }
     Set<TreinadorDTO> toTreinadorDTOs(Set<Treinador> treinadores){
         return treinadores.stream().map(this::toTreinadorDTO).collect(Collectors.toSet());

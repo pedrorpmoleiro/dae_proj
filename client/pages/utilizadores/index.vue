@@ -30,7 +30,7 @@
                     <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                    <v-text-field v-model="editedItem.username" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field disabled v-model="editedItem.username" label="Username"></v-text-field>
@@ -77,7 +77,7 @@
       headers: [
         {text: 'ID', value: 'idSocio'},
         {text: 'Nome', value: 'name'},
-        {text: 'E-mail', value: 'email'},
+        {text: 'E-mail', value: 'username'},
         {text: 'Username', value: 'username'},
         {text: 'Tipo', value: 'tipo'},
         { text: 'Actions', value: 'action', sortable: false },
@@ -86,12 +86,12 @@
       editedIndex: -1,
       editedItem: {
         name: '',
-        email: '',
+        username: '',
         username: ''
       },
       defaultItem: {
         name: '',
-        email: '',
+        username: '',
         username: ''
       },
     }),
@@ -152,7 +152,7 @@
           Object.assign(this.users[this.editedIndex], this.editedItem)
           this.$axios.$put('/api/users/'+userName, {
             name: this.editedItem.name,
-            email: this.editedItem.email,
+            username: this.editedItem.username,
           })
                   .then(function(response){
                     console.log("User updated successfully");
