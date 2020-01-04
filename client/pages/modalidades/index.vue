@@ -1,5 +1,6 @@
 <template>
   <div>
+      <div v-if="userLogado.tipo=='ADMINISTRADOR'">
     <v-dialog v-model="dialogE" width="400px">
       <v-card>
         <v-card-title>
@@ -161,6 +162,10 @@
         </v-card>
       </v-col>
     </v-row>
+      </div>
+      <div v-if="userLogado.tipo != 'ADMINISTRADOR'">
+          <v-banner>Only the admin could use this page.</v-banner>
+      </div>
   </div>
 </template>
 
@@ -169,6 +174,10 @@
     name: "modalidades",
     data: function () {
       return {
+          userLogado:{
+              tipo: undefined,
+              username: undefined
+          },
         dialogcreateEscaloes: false,
         dialogEscaloes: false,
         dialogE: false,
@@ -208,6 +217,34 @@
         escalaoSelected: ''
       }
     },
+      mounted(){
+          if (this.userLogado.username != null) {
+              this.isUserAutenticado = true;
+          } else {
+              let userUsername = localStorage.getItem("username");
+
+              if (userUsername == null) {
+                  console.log("Não esta logado");
+                  this.$router.push("/login");
+                  return;
+              }
+              console.log(userUsername);
+              this.$axios({
+                  method: "get",
+                  url: "api/users/" + userUsername,
+                  headers: { "Content-Type": "application/json" }
+              })
+                  .then(response => {
+                      //console.log(response)
+                      this.userLogado.tipo = response.data.tipo;
+                      this.userLogado.username = response.data.username;
+                  })
+                  .catch(error => {
+                      console.log(error);
+                      console.log(this.$axios.defaults.headers);
+                  });
+          }
+      },
     created() {
       this.getEpocas();
     },
