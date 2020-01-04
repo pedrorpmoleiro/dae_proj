@@ -2,6 +2,8 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 
@@ -13,23 +15,31 @@ import java.io.Serializable;
 })
 
 public class Treinador extends Socio implements Serializable {
-    @ManyToOne
-    @JoinColumn(name = "ESCALAO_CODE")
-    private Escalao escalao;
+    @ManyToMany
+    @JoinTable(name = "ESCALAO_TREINADOR",
+            joinColumns = @JoinColumn(name = "TREINADOR_USERNAME",referencedColumnName = "USERNAME"),
+            inverseJoinColumns
+                    = @JoinColumn(name = "ESCALAO_ID",referencedColumnName = "CODE"))
+    private Set<Escalao> escaloes;
     public Treinador() {
     }
 
     public Treinador( String username,String password, String name, String email) {
         super( username,password, name, email);
         setTipo(SocioType.TREINADOR);
-        this.escalao=null;
+        this.escaloes=new LinkedHashSet<>();
     }
 
-    public Escalao getEscalao() {
-        return escalao;
+    public Set<Escalao> getEscaloes() {
+        return escaloes;
     }
 
-    public void setEscalao(Escalao escalao) {
-        this.escalao = escalao;
+    public void setEscaloes(Set<Escalao> escaloes) {
+        this.escaloes = escaloes;
+    }
+    public void addEscalao(Escalao escalao){
+        if(!this.escaloes.contains(escalao)){
+            escaloes.add(escalao);
+        }
     }
 }

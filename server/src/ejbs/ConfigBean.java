@@ -33,16 +33,12 @@ public class ConfigBean {
 
             //Modalidades
             modalidadeBean.create("BASQUETBALL","2018-2019");
-            modalidadeBean.create("BASQUETBALL","2019-2020");
+            //modalidadeBean.create("BASQUETBALL","2019-2020");
 
 
             //Escalao
             escalaoBean.create("SUB20","BASQUETBALL","2018-2019");
-            escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
-            //escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20", TipoDia.SEGUNDA_FEIRA);
-            /*
-            escalaoBean.create("SUB20","BASQUETBALL","2019-2020");
-
+            //escalaoBean.create("SUB20","BASQUETBALL","2019-2020");
             //Atleta
             atletaBean.create("kevin20","123","Kevin","kevin@mail.pt");
             atletaBean.create("pedro1","123","Pedro","pedro@mail.pt");
@@ -57,7 +53,8 @@ public class ConfigBean {
 
             modalidadeBean.enrollAtletaEscalao("SUB20","kevin20","2018-2019","BASQUETBALL");
             modalidadeBean.enrollTreinadorEscalao("SUB20","profe1","2018-2019","BASQUETBALL");
-*/
+            escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
+
 
 
         }catch (Exception e){
