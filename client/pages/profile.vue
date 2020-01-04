@@ -207,6 +207,7 @@ export default {
   methods: {
     logOut() {
       localStorage.removeItem("username");
+      this.$router.push("/login");
     }
   },
   mounted() {
