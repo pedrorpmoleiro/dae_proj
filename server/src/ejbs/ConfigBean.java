@@ -42,7 +42,7 @@ public class ConfigBean {
             /* Admins */
             administradorBean.create("kenalx1999", "123123", "kevin", "kevin@gmail.com");
             administradorBean.create("chaca", "123123", "andres", "andres@gmail.com");
-            administradorBean.create("pedrinsky", "123123", "pedro", "pedro@gmail.com");
+            administradorBean.create("pedrinsky", "123123", "pedro", "pedro.r.p.moleiro@gmail.com");
 
             /* Treinador */
             treinadorBean.create("lucho", "456456", "luis", "luis@gmail.com");

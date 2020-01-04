@@ -257,7 +257,7 @@
             description: this.create.description,
             type: type
           })
-          .then(response => {
+          .then(() => {
             this.loadingCreate = false;
             this.closeDialog();
             this.alertSuccess = true;
