@@ -66,6 +66,24 @@ public class UserController {
         return  atletaProfileDTO;
     }
 
+    TreinadorProfileDTO toTreinadorDTOConEscalaos(Treinador treinador){
+        TreinadorProfileDTO treinadorProfileDTO = new TreinadorProfileDTO();
+        //atletaProfileDTO.setEscaloes(atleta.getEscaloes());
+        for (Escalao escalao:treinador.getEscaloes()) {
+            //EscalaoDTO escalaoDTO= new EscalaoDTO(escalao.getName());
+            treinadorProfileDTO.addModalidade(escalao.getModalidade().getNome());
+            treinadorProfileDTO.addEscalao(escalao.getName());
+            for (Atleta atleta:escalao.getAtletas()) {
+                treinadorProfileDTO.addAtletas(atleta.getName());
+            }
+        }
+        treinadorProfileDTO.setName(treinador.getName());
+        treinadorProfileDTO.setEmail(treinador.getEmail());
+        treinadorProfileDTO.setIdSocio(treinador.getIdSocio());
+        treinadorProfileDTO.setUsername(treinador.getUsername());
+        return  treinadorProfileDTO;
+    }
+
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/users/”
     public Response allSocios() {
@@ -296,6 +314,14 @@ public class UserController {
 
         return Response.status(Response.Status.CREATED).build();
     }
+
+    @GET
+    @Path("/treinadores/{username}")
+    public Response getTreinadorDetails(@PathParam("username") String username) {
+        Treinador treinador = treinadorBean.findTreinador(username);
+        return Response.status(Response.Status.OK).entity(toTreinadorDTOConEscalaos(treinador)).build();
+    }
+
 /*
     @GET
     @Path("/treinadores/{username}")
