@@ -140,7 +140,6 @@
           </v-card>
         </form>
       </v-dialog>
-
       <v-spacer />
       <v-btn @click="getPayments" icon :loading="loading">
         <v-icon>refresh</v-icon>
@@ -243,7 +242,7 @@ export default {
           receipt: this.create.receipt
         })
         .then(response => {
-          if (response.status != 201) {
+          if (response.status !== 201) {
             this.loadingCreate = false;
             this.closeDialog();
             this.alertError = true;
@@ -287,7 +286,7 @@ export default {
           status: status,
           receipt: this.create.receipt
         })
-        .then(response => {
+        .then(() => {
           this.loadingCreate = false;
           this.closeDialog();
           this.alertSuccess = true;
@@ -303,7 +302,7 @@ export default {
     deletePayment(item) {
       this.$axios
         .delete("/api/payments/" + item.code + "/delete")
-        .then(response => {
+        .then(() => {
           this.alertSuccess = true;
           this.getPayments();
         })
@@ -410,45 +409,25 @@ export default {
       };
     },
     isCodeValid() {
-      if (this.create.code.length == 0) {
-        return false;
-      }
-
-      return true;
+      return this.create.code.length !== 0;
     },
     isPriceValid() {
-      if (this.create.price.length == 0) {
-        return false;
-      }
-
-      return true;
+      return this.create.price.length !== 0;
     },
     isProductCodeValid() {
-      if (this.create.productCode.length == 0) {
-        return false;
-      }
-
-      return true;
+      return this.create.productCode.length !== 0;
     },
     isQuantityValid() {
-      if (this.create.quantity.length == 0) {
-        return false;
-      }
-
-      return true;
+      return this.create.quantity.length !== 0;
     },
     isSocioUsernameValid() {
-      if (this.create.socioUsername.length == 0) {
-        return false;
-      }
-
-      return true;
+      return this.create.socioUsername.length !== 0;
     },
     isDateValid() {
       return this.isDateValidValue(this.create.date);
     },
     isDateValidValue(value) {
-      if (this.create.date.length == 0) {
+      if (this.create.date.length === 0) {
         return false;
       }
 
@@ -458,34 +437,31 @@ export default {
       //console.log("Input timestamp:" + dateCreate);
       //console.log("Current timestamp:" + dateNow);
 
-      if (dateCreate > dateNow) {
+      return dateCreate <= dateNow;
+    },
+    isStatusValid() {
+      if (this.create.status.length === 0) {
         return false;
       }
 
-      return true;
-    },
-    isStatusValid() {
-      if (this.create.status.length == 0) {
-        return false;
+      switch (this.create.status) {
+        case "Pago":
+          break;
+        case "Não Pago":
+          break;
+        case "Parcial":
+          break;
+        default:
+          return false;
       }
 
       return true;
     },
     isReceiptValid() {
-      if (this.create.receipt.length == 0) {
-        return false;
-      }
-
-      return true;
+      return this.create.receipt.length !== 0;
     }
   },
   computed: {
-    currentDateUpdate() {
-      let currentDate = new Date().toISOString().split(".")[0];
-      console.log(this.currentDate);
-
-      return currentDate;
-    },
     isFormValid() {
       if (!this.isCodeValid()) {
         //console.log("code error");
@@ -536,6 +512,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>

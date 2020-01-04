@@ -1,9 +1,6 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -16,11 +13,23 @@ import java.io.Serializable;
 })
 
 public class Treinador extends Socio implements Serializable {
+    @ManyToOne
+    @JoinColumn(name = "ESCALAO_CODE")
+    private Escalao escalao;
     public Treinador() {
     }
 
     public Treinador( String username,String password, String name, String email) {
         super( username,password, name, email);
         setTipo(SocioType.TREINADOR);
+        this.escalao=null;
+    }
+
+    public Escalao getEscalao() {
+        return escalao;
+    }
+
+    public void setEscalao(Escalao escalao) {
+        this.escalao = escalao;
     }
 }

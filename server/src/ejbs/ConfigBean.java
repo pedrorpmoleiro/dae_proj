@@ -1,7 +1,9 @@
 package ejbs;
 
+import entities.Epoca;
 import entities.PaymentStatus;
 import entities.ProductType;
+import entities.TipoDia;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -15,20 +17,25 @@ import java.util.Base64;
 @Startup
 @Singleton(name = "ConfigEJB")
 public class ConfigBean {
-    //@EJB
-    //private ModalidadeBean modalidadeBean;
     @EJB
-    private AdministradorBean administradorBean;
+    private ModalidadeBean modalidadeBean;
+    @EJB
+    private EscalaoBean escalaoBean;
+    @EJB
+    private EpocaBean epocaBean;
+    @EJB
+    private AtletaBean atletaBean;
     @EJB
     private TreinadorBean treinadorBean;
     @EJB
-    private AtletaBean atletaBean;
+    private AdministradorBean administradorBean;
     @EJB
     private ProductBean productBean;
     @EJB
     private PaymentBean paymentBean;
-    //@EJB
-    //private EscalaoBean escalaoBean;
+    
+    public ConfigBean() {
+    }
 
     @PostConstruct
     public void populateDB() {
@@ -41,6 +48,20 @@ public class ConfigBean {
             //escalaoBean.create("SUB20", "BASQUETBALL");
             //escalaoBean.create("SUB22", "BASQUETBALL");
             //escalaoBean.create("SUB19", "BASQUETBALL");
+
+            //Epoca
+            epocaBean.create("2018-2019");
+            epocaBean.create("2019-2020");
+
+            //Modalidades
+            modalidadeBean.create("BASQUETBALL","2018-2019");
+            modalidadeBean.create("BASQUETBALL","2019-2020");
+
+
+            //Escalao
+            escalaoBean.create("SUB20","BASQUETBALL","2018-2019");
+            escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
+            //escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20", TipoDia.SEGUNDA_FEIRA);
 
             String password = "123123";
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -75,5 +96,6 @@ public class ConfigBean {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+
     }
 }
