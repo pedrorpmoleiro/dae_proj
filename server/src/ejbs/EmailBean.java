@@ -1,5 +1,4 @@
 package ejbs;
-
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.mail.Message;
@@ -11,7 +10,6 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 @Stateless(name = "EmailEJB")
 public class EmailBean {
 

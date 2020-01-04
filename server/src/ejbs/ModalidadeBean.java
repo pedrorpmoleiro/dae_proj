@@ -1,6 +1,7 @@
 package ejbs;
 
-import entities.Modalidade;
+import entities.*;
+import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 import exceptions.MyIllegalArgumentException;
 
@@ -16,16 +17,35 @@ public class ModalidadeBean {
     }
     @PersistenceContext
     EntityManager em;
-    public void create(String nome){
+    public void create(String nome,String epoca)throws MyEntityExistsException, MyEntityNotFoundException{
             try {
-                Modalidade modalidade= em.find(Modalidade.class,nome);
-                if(modalidade==null){
-                    modalidade=new Modalidade(nome);
-                    em.persist(modalidade);
+                Epoca epoca1=em.find(Epoca.class,epoca);
+                if(epoca1==null){
+                    throw new  MyEntityNotFoundException("EPOCA_NOT_EXIST");
+                }else{
+                    Modalidade modalidade=null;
+                    for (Modalidade modalidade1:epoca1.getModalidades()) {
+                        if((modalidade1.getEpoca().getNome().equals(epoca) && modalidade1.getNome().equals(nome))){
+                            modalidade=modalidade1;
+                            break;
+                        }
+                    }
+                    if(modalidade!=null){
+                        throw  new MyEntityExistsException("MODALIDADE_EXIST");
+                    }else{
+                        modalidade=new Modalidade(nome.toUpperCase(),epoca1);
+                        em.persist(modalidade);
+                        epoca1.addModalidade(modalidade);
+                    }
                 }
 
-            }catch (Exception e){
 
+            }catch (MyEntityNotFoundException e){
+                throw  e;
+            }catch (MyEntityExistsException e){
+                    throw  e;
+            }catch (Exception e){
+                throw new EJBException("ERROR_FINDING_MODALIDADE", e);
             }
     }
     public List<Modalidade> all() {
@@ -38,14 +58,25 @@ public class ModalidadeBean {
         }
 
     }
-    public Modalidade findModalidade(String name) throws MyEntityNotFoundException {
+    public Modalidade findModalidade(String epoca,String nome) throws MyEntityNotFoundException {
         try{
-            Modalidade modalidade= em.find(Modalidade.class, name);
-            if(modalidade==null){
-                throw new MyEntityNotFoundException("MODALIDADE_NOT_EXIST");
+            Epoca epoca1= em.find(Epoca.class, epoca);
+            if(epoca1==null){
+                throw new MyEntityNotFoundException("EPOCA_NOT_EXIST");
             }
             else {
-                return modalidade;
+                Modalidade modalidade=null;
+                for (Modalidade modalidade1:epoca1.getModalidades()) {
+                    if((modalidade1.getEpoca().getNome().equals(epoca) && modalidade1.getNome().equals(nome))){
+                          modalidade=modalidade1;
+                          break;
+                    }
+                }
+                if(modalidade==null){
+                    throw new MyEntityNotFoundException("MODALIDADE_NOT_EXIST");
+                }else{
+                    return modalidade;
+                }
             }
         }catch (MyEntityNotFoundException e){
             throw  e;
@@ -54,12 +85,11 @@ public class ModalidadeBean {
             throw new EJBException("ERROR_FINDING_MODALIDADE", e);
         }
     }
-    public void update(String name,String newName){
+    public void update(String epoca,String name,String newName){
         try {
-            Modalidade modalidade = em.find(Modalidade.class, name);
+            Modalidade modalidade = this.findModalidade(epoca, name);
             if(modalidade!=null){
                 modalidade.setNome(newName);
-
             }
         }catch (Exception e){
             System.err.println("SYS_ERROR_UPDATE" + e.getMessage());
@@ -78,6 +108,95 @@ public class ModalidadeBean {
             throw  e;
         }catch (Exception e){
 
+        }
+    }
+
+    public void enrollAtletaEscalao(String code,String username,String epocaNome,String modalidadeNome) throws MyEntityNotFoundException {
+        try{
+            Epoca epoca= (Epoca) em.find(Epoca.class,epocaNome);
+            if(epoca==null){
+                throw new MyEntityNotFoundException("EPOCA_NOT_FOUND");
+            }else{
+                Modalidade modalidade= null;
+                for (Modalidade modalidade1:epoca.getModalidades()) {
+                    if(modalidade1.getNome().equals(modalidadeNome)&&modalidade1.getEpoca().equals(epoca)){
+                        modalidade=modalidade1;
+                        break;
+                    }
+                }
+                if(modalidade==null){
+                    throw new MyEntityNotFoundException("MODALIDADE_NOT_FOUND");
+                }else{
+                    Escalao escalao=null;
+                    for (Escalao escalao1:modalidade.getEscaloes()) {
+                        if(escalao1.getName().equals(code)){
+                            escalao=escalao1;
+                            break;
+                        }
+                    }
+                    if(escalao!=null){
+                        Atleta atleta= (Atleta) em.find(Atleta.class,username);
+                        if(atleta!=null){
+                            atleta.addEscalao(escalao);
+                            escalao.addAtleta(atleta);
+                        }else{
+                            throw new MyEntityNotFoundException("ATLETA_NOT_FOUND");
+                        }
+                    }else{
+                        throw new MyEntityNotFoundException("ESCALAO_NOT_FOUND");
+                    }
+                }
+
+            }
+        }catch (MyEntityNotFoundException e){
+            throw e;
+        }
+        catch (Exception e){
+            throw new EJBException( e.getMessage());
+        }
+    }
+    public void enrollTreinadorEscalao(String code,String username,String epocaNome,String modalidadeNome) throws MyEntityNotFoundException {
+        try{
+            Epoca epoca= (Epoca) em.find(Epoca.class,epocaNome);
+            if(epoca==null){
+                throw new MyEntityNotFoundException("EPOCA_NOT_FOUND");
+            }else{
+                Modalidade modalidade= null;
+                for (Modalidade modalidade1:epoca.getModalidades()) {
+                    if(modalidade1.getNome().equals(modalidadeNome)&&modalidade1.getEpoca().equals(epoca)){
+                        modalidade=modalidade1;
+                        break;
+                    }
+                }
+                if(modalidade==null){
+                    throw new MyEntityNotFoundException("MODALIDADE_NOT_FOUND");
+                }else{
+                    Escalao escalao=null;
+                    for (Escalao escalao1:modalidade.getEscaloes()) {
+                        if(escalao1.getName().equals(code)){
+                            escalao=escalao1;
+                            break;
+                        }
+                    }
+                    if(escalao!=null){
+                        Treinador treinador= (Treinador) em.find(Treinador.class,username);
+                        if(treinador!=null){
+                            treinador.addEscalao(escalao);
+                            escalao.addTreinador(treinador);
+                        }else{
+                            throw new MyEntityNotFoundException("ATLETA_NOT_FOUND");
+                        }
+                    }else{
+                        throw new MyEntityNotFoundException("ESCALAO_NOT_FOUND");
+                    }
+                }
+
+            }
+        }catch (MyEntityNotFoundException e){
+            throw e;
+        }
+        catch (Exception e){
+            throw new EJBException( e.getMessage());
         }
     }
 

@@ -1,71 +1,67 @@
 package ejbs;
 
-import entities.PaymentStatus;
-import entities.ProductType;
+import entities.Epoca;
+import entities.TipoDia;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import java.time.Instant;
 
 @Startup
 @Singleton(name = "ConfigEJB")
 public class ConfigBean {
-    //@EJB
-    //private ModalidadeBean modalidadeBean;
     @EJB
-    private AdministradorBean administradorBean;
+    private ModalidadeBean modalidadeBean;
     @EJB
-    private TreinadorBean treinadorBean;
+    private EscalaoBean escalaoBean;
+    @EJB
+    private EpocaBean epocaBean;
     @EJB
     private AtletaBean atletaBean;
     @EJB
-    private ProductBean productBean;
+    private TreinadorBean treinadorBean;
     @EJB
-    private PaymentBean paymentBean;
-    //@EJB
-    //private EscalaoBean escalaoBean;
+    private HorarioBean horarioBean;
+    public ConfigBean() {
+    }
 
     @PostConstruct
-    public void populateDB() {
-        try {
-            //MODALIDADES
-            //modalidadeBean.create("BASQUETBALL");
-            //modalidadeBean.create("FOOTEBOLL");
+    public void populateDB(){
+        try{
+            //Epoca
+            epocaBean.create("2018-2019");
+            epocaBean.create("2019-2020");
 
-            // ESCALOES
-            //escalaoBean.create("SUB20", "BASQUETBALL");
-            //escalaoBean.create("SUB22", "BASQUETBALL");
-            //escalaoBean.create("SUB19", "BASQUETBALL");
+            //Modalidades
+            modalidadeBean.create("BASQUETBALL","2018-2019");
+            //modalidadeBean.create("BASQUETBALL","2019-2020");
 
-            /* Admins */
-            administradorBean.create("kenalx1999", "123123", "kevin", "kevin@gmail.com");
-            administradorBean.create("chaca", "123123", "andres", "andres@gmail.com");
-            administradorBean.create("pedrinsky", "123123", "pedro", "pedro.r.p.moleiro@gmail.com");
 
-            /* Treinador */
-            treinadorBean.create("lucho", "456456", "luis", "luis@gmail.com");
-            treinadorBean.create("mateo", "456456", "mateo", "mateo@gmail.com");
+            //Escalao
+            escalaoBean.create("SUB20","BASQUETBALL","2018-2019");
+            //escalaoBean.create("SUB20","BASQUETBALL","2019-2020");
+            //Atleta
+            atletaBean.create("kevin20","123","Kevin","kevin@mail.pt");
+            atletaBean.create("pedro1","123","Pedro","pedro@mail.pt");
 
-            /*Atleta*/
-            atletaBean.create("mario", "789789", "mario", "mario@gmail.com");
-            atletaBean.create("santiago", "789789", "santiago", "santiago@gmail.com");
 
-            // PRODUCTS
-            productBean.create(1, ProductType.AULA, "123", 24.0);
-            productBean.create(2, ProductType.ARTIGO, "123", 124.0);
-            productBean.create(3, ProductType.INSCRICAO, "123", 424.0);
+            //TODO Treinador
+            treinadorBean.create("profe1","123","KingMarco","king@mail.pt");
+            treinadorBean.create("profe2","123","KingMarco","king1@mail.pt");
 
-            // PAYMENTS
-            paymentBean.create(1, "lucho", 1, Instant.now().getEpochSecond(), 2, 200.0,
-                    PaymentStatus.PAID, "RECEIPT");
-            paymentBean.create(2, "mario", 3, Instant.now().getEpochSecond(), 1, 50.0,
-                    PaymentStatus.NOT_PAID, "RECEIPT");
-            paymentBean.create(3, "mateo", 2, Instant.now().getEpochSecond(), 6, 2400.0,
-                    PaymentStatus.PARCIAL, "RECEIPT");
-        } catch (Exception e) {
+            //entroll Atleta-Modalidade
+
+
+            modalidadeBean.enrollAtletaEscalao("SUB20","kevin20","2018-2019","BASQUETBALL");
+            modalidadeBean.enrollTreinadorEscalao("SUB20","profe1","2018-2019","BASQUETBALL");
+            escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
+            horarioBean.createAssiduidade("profe1","SUB20","2018-2019",TipoDia.valueOf("SEGUNDA_FEIRA"),10,12,"kevin20",true);
+
+
+        }catch (Exception e){
             System.err.println(e.getMessage());
         }
+
     }
 }
