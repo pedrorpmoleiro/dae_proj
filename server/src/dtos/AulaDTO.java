@@ -1,16 +1,21 @@
 package dtos;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class AulaDTO {
     private String dia;
     private String description;
     private int horaInicio;
     private int horaFim;
+    private Set<AssiduidadeDTO> assistudes;
 
     public AulaDTO(String dia, String description, int horaInicio, int horaFim) {
         this.dia = dia;
         this.description = description;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
+        this.assistudes=new LinkedHashSet<>();
     }
     public AulaDTO(){
 
@@ -45,5 +50,13 @@ public class AulaDTO {
 
     public void setHoraFim(int horaFim) {
         this.horaFim = horaFim;
+    }
+
+    public Set<AssiduidadeDTO> getAssistudes() {
+        return assistudes;
+    }
+
+    public void setAssistudes(Set<AssiduidadeDTO> assistudes) {
+        this.assistudes = assistudes;
     }
 }
