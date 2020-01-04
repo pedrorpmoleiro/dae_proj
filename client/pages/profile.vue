@@ -103,35 +103,107 @@
                   </v-list>
                 </v-card>
 
-                <v-card
-                  class="mx-auto"
-                  max-width="300"
-                  tile
-                >
-                  <v-list disabled>
-                    <v-subheader>Treinadores</v-subheader>
-                    <v-list-item-group v-model="item" color="primary">
-                      <v-list-item
-                        v-for="(item, i) in user.treinadores"
-                        :key="i"
-                      >
-                        <v-list-item-icon>
-                          <v-icon>mdi-brain</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title v-text="item"></v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
-                  </v-list>
-                </v-card>
-              </v-card>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-content>
+                        <v-card
+                                class="mx-auto"
+                                max-width="300"
+                                tile
+                        >
+                            <v-list disabled>
+                                <v-subheader>Treinadores</v-subheader>
+                                <v-list-item-group v-model="item" color="primary">
+                                    <v-list-item
+                                            v-for="(item, i) in user.treinadores"
+                                            :key="i"
+                                    >
+                                        <v-list-item-icon>
+                                            <v-icon>mdi-brain</v-icon>
+                                        </v-list-item-icon>
+                                        <v-list-item-content>
+                                            <v-list-item-title v-text="item"></v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                </v-list-item-group>
+                            </v-list>
+                        </v-card>
+                    </v-card>
+                    </div>
+                        <div v-if="user.tipo=='TREINADOR'">
+                            <v-card>
+                                <v-card
+                                        class="mx-auto"
+                                        max-width="300"
+                                        tile
+                                >
+                                    <v-list disabled>
+                                        <v-subheader>Modalidades</v-subheader>
+                                        <v-list-item-group v-model="item" color="primary">
+                                            <v-list-item
+                                                    v-for="(item, i) in user.modalidades"
+                                                    :key="i"
+                                            >
+                                                <v-list-item-icon>
+                                                    <v-icon>mdi-basketball</v-icon>
+                                                </v-list-item-icon>
+                                                <v-list-item-content>
+                                                    <v-list-item-title v-text="item"></v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </v-card>
+
+                                <v-card
+                                        class="mx-auto"
+                                        max-width="300"
+                                        tile
+                                >
+                                    <v-list disabled>
+                                        <v-subheader>Escaloes</v-subheader>
+                                        <v-list-item-group v-model="item" color="primary">
+                                            <v-list-item
+                                                    v-for="(item, i) in user.escaloes"
+                                                    :key="i"
+                                            >
+                                                <v-list-item-icon>
+                                                    <v-icon>mdi-arrow-up-bold</v-icon>
+                                                </v-list-item-icon>
+                                                <v-list-item-content>
+                                                    <v-list-item-title v-text="item"></v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </v-card>
+
+                                <v-card
+                                        class="mx-auto"
+                                        max-width="300"
+                                        tile
+                                >
+                                    <v-list disabled>
+                                        <v-subheader>Atletas</v-subheader>
+                                        <v-list-item-group v-model="item" color="primary">
+                                            <v-list-item
+                                                    v-for="(item, i) in user.atletas"
+                                                    :key="i"
+                                            >
+                                                <v-list-item-icon>
+                                                    <v-icon>mdi-brain</v-icon>
+                                                </v-list-item-icon>
+                                                <v-list-item-content>
+                                                    <v-list-item-title v-text="item"></v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </v-card>
+                            </v-card>
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-content>
 </template>
 <style scoped>
   img {
@@ -139,18 +211,29 @@
   }
 </style>
 <script type="text/javascript">
-  export default {
-    //props: ['user', 'wallets'],
-    data() {
-      return {
-        user: {
-          name: undefined,
-          email: undefined,
-          tipo: undefined,
-          username: undefined,
-          modalidades: [],
-          escaloes: [],
-          treinadores: [],
+    export default {
+        //props: ['user', 'wallets'],
+        data() {
+            return {
+                user: {
+                    name: undefined,
+                    email: undefined,
+                    tipo: undefined,
+                    username: undefined,
+                    modalidades:[],
+                    escaloes:[],
+                    treinadores:[],
+                    atletas:[],
+                },
+                isUserAutenticado: false,
+                item: 1,
+               /* items: [
+                    { text: 'Real-Time', icon: 'mdi-clock' },
+                    { text: 'Audience', icon: 'mdi-account' },
+                    { text: 'Conversions', icon: 'mdi-flag' },
+                ],*/
+
+            };
         },
         isUserAutenticado: false,
         item: 1,
@@ -178,40 +261,55 @@
       } else {
         let userUsername = localStorage.getItem("username");
 
-        if (userUsername == null) {
-          console.log("Não esta logado");
-          this.$router.push('/login');
-          return;
-        }
-        console.log(userUsername);
-        this.$axios({
-          method: 'get',
-          url: 'api/users/' + userUsername,
-          headers: {'Content-Type': 'application/json'}
-        })
-          .then(response => {
-            //console.log(response)
-            this.user.email = response.data.email;
-            this.user.name = response.data.name;
-            this.user.tipo = response.data.tipo;
-            this.user.username = response.data.username;
+                        console.log(this.user.tipo)
+                        if(this.user.tipo != null && this.user.tipo=='ATLETA'){
+                            this.$axios({
+                                method: 'get',
+                                url: 'api/users/atletas/' + userUsername,
+                                headers: {'Content-Type': 'application/json'}
+                            })
+                                .then(response => {
+                                    console.log(response.data.modalidades)
+                                    this.user.modalidades = response.data.modalidades
+                                    console.log(this.user.modalidades)
+                                    this.user.escaloes = response.data.escaloes
+                                    console.log(this.user.escaloes)
+                                    this.user.treinadores = response.data.treinadores
+                                    console.log(this.user.treinadores)
 
-            console.log(this.user.tipo);
-            if (this.user.tipo != null && this.user.tipo == 'ATLETA') {
-              console.log("OLIII");
-              this.$axios({
-                method: 'get',
-                url: 'api/users/atletas/' + userUsername,
-                headers: {'Content-Type': 'application/json'}
-              })
-                .then(response => {
-                  console.log(response.data.modalidades)
-                  this.user.modalidades = response.data.modalidades
-                  console.log(this.user.modalidades)
-                  this.user.escaloes = response.data.escaloes
-                  console.log(this.user.escaloes)
-                  this.user.treinadores = response.data.treinadores
-                  console.log(this.user.treinadores)
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                    console.log(this.$axios.defaults.headers)
+                                })
+                        }
+
+                        if(this.user.tipo != null && this.user.tipo=='TREINADOR'){
+                            this.$axios({
+                                method: 'get',
+                                url: 'api/users/treinadores/' + userUsername,
+                                headers: {'Content-Type': 'application/json'}
+                            })
+                                .then(response => {
+                                    console.log(response.data.modalidades)
+                                    this.user.modalidades = response.data.modalidades
+                                    console.log(this.user.modalidades)
+                                    this.user.escaloes = response.data.escaloes
+                                    console.log(this.user.escaloes)
+                                    this.user.atletas = response.data.atletas
+                                    console.log(this.user.atletas)
+
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                    console.log(this.$axios.defaults.headers)
+                                })
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        console.log(this.$axios.defaults.headers)
+                    })
 
                 })
                 .catch(error => {

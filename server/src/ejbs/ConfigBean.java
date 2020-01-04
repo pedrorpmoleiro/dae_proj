@@ -49,8 +49,10 @@ public class ConfigBean {
             //Modalidades
             modalidadeBean.create("BASQUETBALL","2018-2019");
             modalidadeBean.create("BASQUETBALL","2019-2020");
+            modalidadeBean.create("SOCCER","2019-2020");
 
             //Escalao
+            escalaoBean.create("SUB18","SOCCER","2019-2020");
             escalaoBean.create("SUB20","BASQUETBALL","2018-2019");
             escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
             //escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20", TipoDia.SEGUNDA_FEIRA);
@@ -80,6 +82,7 @@ public class ConfigBean {
 
             // MODALIDADE
             modalidadeBean.enrollAtletaEscalao("SUB20","mario","2018-2019","BASQUETBALL");
+            modalidadeBean.enrollAtletaEscalao("SUB18","mario","2019-2020","SOCCER");
             modalidadeBean.enrollTreinadorEscalao("SUB20","lucho","2018-2019","BASQUETBALL");
 
             // PAYMENTS
