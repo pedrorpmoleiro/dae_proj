@@ -4,7 +4,6 @@ import entities.*;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 
-
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,61 +11,59 @@ import javax.persistence.PersistenceContext;
 
 @Stateless(name = "EscalaoEJB")
 public class EscalaoBean {
-    public EscalaoBean() {
-    }
     @PersistenceContext
     EntityManager em;
     public void create(String nome,String modalidadeCode,String epoca) throws MyEntityNotFoundException, MyEntityExistsException {
         try {
-               Epoca epoca1= em.find(Epoca.class,epoca);
-               if(epoca1==null){
-                   throw new MyEntityNotFoundException("EPOCA_NOT_FOUND");
-               }else{
-                   Modalidade modalidade=null;
-                   for (Modalidade modalidade1:epoca1.getModalidades()) {
-                       if(modalidade1.getNome().equals(modalidadeCode)&&modalidade1.getEpoca().equals(epoca1)){
-                           modalidade=modalidade1;
-                           break;
-                       }
-                   }
-                   if(modalidade==null){
-                       throw  new MyEntityNotFoundException("MODALIDADE_NOT_FOUND");
-                   }
-                   Escalao escalao= new Escalao(modalidade,nome);
-                   Horario horario= new Horario(escalao);
-                   modalidade.addEscalao(escalao);
-                   escalao.setHorario(horario);
-                   //region HUEVADAS
-                   Dia dia1=new Dia(TipoDia.SEGUNDA_FEIRA);
-                   Dia dia2=new Dia(TipoDia.TERCA_FEIRA);
-                   Dia dia3=new Dia(TipoDia.QUARTA_FEIRA);
-                   Dia dia4=new Dia(TipoDia.QUINTA_FEIRA);
-                   Dia dia5=new Dia(TipoDia.SEXTA_FEIRA);
-                   dia1.setHorario(horario);
-                   dia2.setHorario(horario);
-                   dia3.setHorario(horario);
-                   dia4.setHorario(horario);
-                   dia5.setHorario(horario);
-                   horario.addDia(dia1);
-                   horario.addDia(dia2);
-                   horario.addDia(dia3);
-                   horario.addDia(dia4);
-                   horario.addDia(dia5);
+            Epoca epoca1= em.find(Epoca.class,epoca);
+            if(epoca1==null){
+                throw new MyEntityNotFoundException("EPOCA_NOT_FOUND");
+            }else{
+                Modalidade modalidade=null;
+                for (Modalidade modalidade1:epoca1.getModalidades()) {
+                    if(modalidade1.getNome().equals(modalidadeCode)&&modalidade1.getEpoca().equals(epoca1)){
+                        modalidade=modalidade1;
+                        break;
+                    }
+                }
+                if(modalidade==null){
+                    throw  new MyEntityNotFoundException("MODALIDADE_NOT_FOUND");
+                }
+                Escalao escalao= new Escalao(modalidade,nome);
+                Horario horario= new Horario(escalao);
+                modalidade.addEscalao(escalao);
+                escalao.setHorario(horario);
+                //region HUEVADAS
+                Dia dia1=new Dia(TipoDia.SEGUNDA_FEIRA);
+                Dia dia2=new Dia(TipoDia.TERCA_FEIRA);
+                Dia dia3=new Dia(TipoDia.QUARTA_FEIRA);
+                Dia dia4=new Dia(TipoDia.QUINTA_FEIRA);
+                Dia dia5=new Dia(TipoDia.SEXTA_FEIRA);
+                dia1.setHorario(horario);
+                dia2.setHorario(horario);
+                dia3.setHorario(horario);
+                dia4.setHorario(horario);
+                dia5.setHorario(horario);
+                horario.addDia(dia1);
+                horario.addDia(dia2);
+                horario.addDia(dia3);
+                horario.addDia(dia4);
+                horario.addDia(dia5);
 
-                   em.persist(dia1);
-                   em.persist(dia2);
-                   em.persist(dia3);
-                   em.persist(dia4);
-                   em.persist(dia5);
+                em.persist(dia1);
+                em.persist(dia2);
+                em.persist(dia3);
+                em.persist(dia4);
+                em.persist(dia5);
 
-                   //endregion
-                   em.persist(escalao);
-                   em.persist(horario);
-               }
+                //endregion
+                em.persist(escalao);
+                em.persist(horario);
+            }
 
 
         }catch (MyEntityNotFoundException e){
-                throw  e;
+            throw  e;
         }catch (Exception e){
             throw new EJBException(e.getMessage());
         }
@@ -99,7 +96,7 @@ public class EscalaoBean {
             }
             return  escalao;
         } catch (MyEntityNotFoundException e) {
-                throw  e;
+            throw  e;
         }catch (Exception e){
             throw new EJBException("ERROR_RETRIEVING_MODALIDADES", e);
         }
@@ -126,17 +123,15 @@ public class EscalaoBean {
                 Dia dia1=null;
                 for (Dia dia2:horario.getDias()) {
                     if(dia2.getDiaType().equals(dia)){
-                            Aula aula=new Aula(description,horaInicio,horaFim);
-                            dia2.addAula(aula);
-                            aula.setDia(dia2);
-                            em.persist(aula);
+                        Aula aula=new Aula(description,horaInicio,horaFim);
+                        dia2.addAula(aula);
+                        aula.setDia(dia2);
+                        em.persist(aula);
                     }
                 }
             }
-
         }catch (MyEntityNotFoundException e){
             throw e;
         }
-
     }
 }

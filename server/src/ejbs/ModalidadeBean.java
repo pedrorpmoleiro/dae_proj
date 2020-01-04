@@ -18,35 +18,35 @@ public class ModalidadeBean {
     @PersistenceContext
     EntityManager em;
     public void create(String nome,String epoca)throws MyEntityExistsException, MyEntityNotFoundException{
-            try {
-                Epoca epoca1=em.find(Epoca.class,epoca);
-                if(epoca1==null){
-                    throw new  MyEntityNotFoundException("EPOCA_NOT_EXIST");
-                }else{
-                    Modalidade modalidade=null;
-                    for (Modalidade modalidade1:epoca1.getModalidades()) {
-                        if((modalidade1.getEpoca().getNome().equals(epoca) && modalidade1.getNome().equals(nome))){
-                            modalidade=modalidade1;
-                            break;
-                        }
-                    }
-                    if(modalidade!=null){
-                        throw  new MyEntityExistsException("MODALIDADE_EXIST");
-                    }else{
-                        modalidade=new Modalidade(nome.toUpperCase(),epoca1);
-                        em.persist(modalidade);
-                        epoca1.addModalidade(modalidade);
+        try {
+            Epoca epoca1=em.find(Epoca.class,epoca);
+            if(epoca1==null){
+                throw new  MyEntityNotFoundException("EPOCA_NOT_EXIST");
+            }else{
+                Modalidade modalidade=null;
+                for (Modalidade modalidade1:epoca1.getModalidades()) {
+                    if((modalidade1.getEpoca().getNome().equals(epoca) && modalidade1.getNome().equals(nome))){
+                        modalidade=modalidade1;
+                        break;
                     }
                 }
-
-
-            }catch (MyEntityNotFoundException e){
-                throw  e;
-            }catch (MyEntityExistsException e){
-                    throw  e;
-            }catch (Exception e){
-                throw new EJBException("ERROR_FINDING_MODALIDADE", e);
+                if(modalidade!=null){
+                    throw  new MyEntityExistsException("MODALIDADE_EXIST");
+                }else{
+                    modalidade=new Modalidade(nome.toUpperCase(),epoca1);
+                    em.persist(modalidade);
+                    epoca1.addModalidade(modalidade);
+                }
             }
+
+
+        }catch (MyEntityNotFoundException e){
+            throw  e;
+        }catch (MyEntityExistsException e){
+            throw  e;
+        }catch (Exception e){
+            throw new EJBException("ERROR_FINDING_MODALIDADE", e);
+        }
     }
     public List<Modalidade> all() {
         try {
@@ -68,8 +68,8 @@ public class ModalidadeBean {
                 Modalidade modalidade=null;
                 for (Modalidade modalidade1:epoca1.getModalidades()) {
                     if((modalidade1.getEpoca().getNome().equals(epoca) && modalidade1.getNome().equals(nome))){
-                          modalidade=modalidade1;
-                          break;
+                        modalidade=modalidade1;
+                        break;
                     }
                 }
                 if(modalidade==null){
@@ -199,7 +199,4 @@ public class ModalidadeBean {
             throw new EJBException( e.getMessage());
         }
     }
-
-
-
 }

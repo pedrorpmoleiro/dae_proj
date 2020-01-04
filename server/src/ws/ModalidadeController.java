@@ -30,7 +30,7 @@ public class ModalidadeController {
     private TreinadorBean treinadorBean;
     @EJB
     private HorarioBean horarioBean;
-//region TODO DTO sin listas
+    //region TODO DTO sin listas
     //Modalidades
     ModalidadeDTO toModalidadeDTONoEscaloes(Modalidade modalidade){
         return new ModalidadeDTO(modalidade.getNome());
@@ -62,7 +62,7 @@ public class ModalidadeController {
     //region EPOCA
     EpocaDTO toEpocaDTO(Epoca epoca){
         EpocaDTO epocaDTO=new EpocaDTO(epoca.getNome());
-                epocaDTO.setModalidades(toModalidadeDTOsSinSocios(epoca.getModalidades()));
+        epocaDTO.setModalidades(toModalidadeDTOsSinSocios(epoca.getModalidades()));
         return  epocaDTO;
     }
     List<EpocaDTO> toEpocaDTOs(List<Epoca> epocas){
@@ -184,14 +184,14 @@ public class ModalidadeController {
     }
 
     @GET
-        @Path("{usernameT}/{escalao}/{epoca}/{dia}/{horaInicio}/{horaFim}/aula")
+    @Path("{usernameT}/{escalao}/{epoca}/{dia}/{horaInicio}/{horaFim}/aula")
     public Response getAula(@PathParam("usernameT") String treinador,@PathParam("escalao") String escalao,@PathParam("epoca") String espoca,
                             @PathParam("dia") String dia,@PathParam("horaInicio") String hInicio,@PathParam("horaFim") String hFim) throws MyEntityNotFoundException,Exception{
         Aula aula = horarioBean.findAulaTreinador(treinador,escalao,espoca,TipoDia.valueOf(dia),Integer.parseInt(hInicio),Integer.parseInt(hFim));
         return  Response.status(Response.Status.OK).entity(toAulaDTOconAssitude(aula)).build();
     }
 
-//endregion
+    //endregion
 //region CREAR
     //TODO crear modalidad
     @POST
@@ -285,7 +285,7 @@ public class ModalidadeController {
                 .entity(entity)
                 .build();
     }
-//endregion
+    //endregion
 //region DELETE
     @DELETE
     @Path("{epoca}/{name}")
