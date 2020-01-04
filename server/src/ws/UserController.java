@@ -109,6 +109,9 @@ public class UserController {
     public Response loginSocio(SocioCreateDTO socioCreateDTO) throws MyEntityExistsException {
         Socio socio = socioBean.findSocio(socioCreateDTO.getUsername());
         if(socio != null){
+            if(socio.isDelete()){
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
             if(socio.getPassword().equals(socioCreateDTO.getPassword())){
                 return Response.status(Response.Status.OK).entity(toDTO(socio)).build();
             }

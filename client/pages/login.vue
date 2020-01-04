@@ -57,7 +57,7 @@
                         console.log('LOGIN')
                         //  this.$root.token=response.data.access_token;
                         //localStorage.token = response.data.access_token
-                        //this.$router.push('/welcome')
+                        this.$router.push('/profile')
                         //window.axios.defaults.headers.common['Authorization']=`Bearer ${localStorage.token}`
 
                     })
