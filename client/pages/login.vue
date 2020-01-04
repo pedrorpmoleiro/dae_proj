@@ -1,10 +1,5 @@
 <template>
     <v-content>
-        <v-card color="indigo lighten-1" dark>
-            <v-card-title color="white">
-                Apoio à gestão de clubes desportivos
-            </v-card-title>
-        </v-card>
         <v-container class="fill-height" fluid>
             <v-row align="center" justify="center">
                 <v-col cols="12" sm="8" md="4">

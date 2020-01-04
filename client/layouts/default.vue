@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       clipped: false,
       drawer: false,
@@ -70,12 +70,25 @@ export default {
         {
           title: 'Modalidades',
           to: '/modalidades'
+        },
+        {
+          title: 'Assiduidade',
+          to: '/assiduidade'
+        },
+        {
+          title: 'Login',
+          to: '/login'
+        },
+        {
+          title: 'Perfil',
+          to: '/profile'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Gestão de Clubes Desportivos'
+      title: 'Apoio à gestão de clubes desportivos'
     }
   }
+}
 </script>

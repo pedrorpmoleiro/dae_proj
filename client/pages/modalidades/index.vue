@@ -10,7 +10,7 @@
                         <v-row>
                             <v-col cols="15" md="6">
                                 <v-text-field v-model="editItemEpoca.nome "
-                                              label="Epoca nome"></v-text-field>
+                                              label="Época nome"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -28,12 +28,12 @@
             <v-card max-height="500px">
                 <v-data-table hide-default-footer :items="escaloes" :headers="headersEscalao">
                     <template v-slot:top>
-                        <h3>Informacao</h3>
+                        <h3>Informação</h3>
                         <v-spacer/>
-                        <v-btn @click="openDialogNewEscalao" class="primary">Criar Escalao</v-btn>
+                        <v-btn @click="openDialogNewEscalao" class="primary">Criar Escalão</v-btn>
                     </template>
                     <template v-slot:no-results>
-                        Não ha resultados
+                        Não há resultados
                     </template>
                     <template v-slot:item.action="{ item }">
                         <v-btn @click="editItemEpocaF(item)">
@@ -115,7 +115,7 @@
                                 </v-toolbar>
                                 <v-dialog v-model="dialog" max-width="500px">
                                     <template v-slot:activator="{ on }">
-                                        <v-btn color="primary" dark class="mb-2" v-on="on" @click="isEdit=false">Nueva
+                                        <v-btn color="primary" dark class="mb-2" v-on="on" @click="isEdit=false">Nova
                                             Modalidade
                                         </v-btn>
                                     </template>
