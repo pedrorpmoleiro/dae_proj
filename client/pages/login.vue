@@ -14,9 +14,9 @@
                         </v-toolbar>
                         <v-card-text>
                             <v-form>
-                                <v-text-field label="Username" v-model="username" name="UsernameLogin" prepend-icon="mdi-account" type="text"/>
+                                <v-text-field label="Username" v-model="username" name="UsernameLogin" prepend-icon="mdi-account" :rules="usernameRules" type="text"/>
                                 <v-text-field id="password" v-model="password" label="Password" name="passwordLogin" prepend-icon="mdi-lock"
-                                              type="password"/>
+                                              :rules="passwordRules" type="password"/>
                             </v-form>
                         </v-card-text>
                         <v-card-actions>
@@ -35,11 +35,51 @@
         data: function () {
             return {
                 username: undefined,
-                password: undefined
+                password: undefined,
+                usernameRules: [
+                    v => !!v || 'UserName is required',
+                    v => (v && v.length <= 35 && v.length >= 4) || 'UserName must be less than 35 characters and more than 4',
+                ],
+                passwordRules: [
+                    v => !!v || 'Password is required',
+                    v => (v && v.length <= 20 && v.length >= 6) || 'Password must be less than 20 characters and more than 6 characters',
+                ],
             }
         },
         methods: {
+            isUsernameValid() {
+                if (!this.username) {
+                    return null
+                }
+                let usernameLen = this.username.length
+                if (usernameLen < 4 || usernameLen > 35) {
+                    return false
+                }
+                return true
+            },
+            isPasswordValid() {
+                if (!this.password) {
+                    return null
+                }
+                let passwordLen = this.password.length
+                if (passwordLen < 6 || passwordLen > 20) {
+                    return false
+                }
+                return true
+            }, isFormValid() {
+                if (!this.isUsernameValid()) {
+                    return false
+                }
+                if (!this.isPasswordValid()) {
+                    return false
+                }
+                return true
+            },
             logIn() {
+                if(!this.isFormValid()){
+                    console.log("ERROR: No form");
+                    return;
+                }
                 const hash = crypto.createHash('sha256');
                 hash.update(this.password);
                 var passwordHash = hash.digest('base64');
