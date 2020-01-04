@@ -55,8 +55,7 @@
                 this.$axios({method: 'post', url: 'api/users/login', data: data, headers: {'Content-Type': 'application/json'}})
                     .then(response => {
                         console.log('LOGIN')
-                        this.$session.start()
-                        this.$session.set('username', this.username)
+                        localStorage.setItem('username', this.username)
                         this.$router.push('/profile')
                         //window.axios.defaults.headers.common['Authorization']=`Bearer ${localStorage.token}`
 

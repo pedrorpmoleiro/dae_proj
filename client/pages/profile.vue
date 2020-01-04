@@ -75,30 +75,46 @@
                     tipo: undefined,
                     username: undefined
                 },
+                isUserAutenticado: false,
             };
         },
-        beforeCreate: function () {
-            if (this.$session ==undefined || !this.$session.exists()) {
+       /* beforeCreate: function () {
+            if (!localStorage.getItem('username')) {
                 this.$router.push('/')
             }
-        },
+        },*/
         methods: {
         },
         mounted() {
-            console.log(this.$session.get('username'));
-            var usename = this.$session.get('username');
-            this.$axios({method: 'get', url: 'api/users/'+usename, headers: {'Content-Type': 'application/json'}})
-                .then(response => {
-                    //console.log(response)
-                    this.user.email = response.data.email;
-                    this.user.name = response.data.name;
-                    this.user.tipo = response.data.tipo;
-                    this.user.username = response.data.username;
+            if (this.user.username != null) {
+                this.isUserAutenticado = true;
+            } else {
+                let userUsername = localStorage.getItem("username");
+
+                if (userUsername == null) {
+                    console.log("Não esta logado");
+                    this.$router.push('/')
+                    return;
+                }
+
+                console.log(userUsername);
+                this.$axios({
+                    method: 'get',
+                    url: 'api/users/' + userUsername,
+                    headers: {'Content-Type': 'application/json'}
                 })
-                .catch(error => {
-                    console.log(error)
-                    console.log(this.$axios.defaults.headers)
-                })
+                    .then(response => {
+                        //console.log(response)
+                        this.user.email = response.data.email;
+                        this.user.name = response.data.name;
+                        this.user.tipo = response.data.tipo;
+                        this.user.username = response.data.username;
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        console.log(this.$axios.defaults.headers)
+                    })
+            }
         }
     };
 </script>
