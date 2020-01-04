@@ -1,5 +1,6 @@
 <template>
   <v-card>
+    <div v-if="userLogado.tipo=='ADMINISTRADOR'">
     <v-card-title>
       <v-text-field v-model="search" label="Search" append-icon="search" single-line hide-details />
     </v-card-title>
@@ -17,7 +18,7 @@
                     <v-text-field v-model="editedItem.name" label="Name" />
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.username" label="Email" />
+                    <v-text-field v-model="editedItem.email" label="Email" />
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field disabled v-model="editedItem.username" label="Username" />
@@ -41,6 +42,10 @@
     <v-btn class="mx-2" fab dark color="indigo" href="utilizadores/create">
       <v-icon dark>mdi-plus</v-icon>
     </v-btn>
+    </div>
+    <div v-if="userLogado.tipo != 'ADMINISTRADOR'">
+      <v-banner>Only the admin could use this page.</v-banner>
+    </div>
   </v-card>
 </template>
 
@@ -52,20 +57,24 @@ export default {
     headers: [
       { text: "ID", value: "idSocio" },
       { text: "Nome", value: "name" },
-      { text: "E-mail", value: "username" },
+      { text: "E-mail", value: "email" },
       { text: "Username", value: "username" },
       { text: "Tipo", value: "tipo" },
       { text: "Actions", value: "action", sortable: false }
     ],
+    userLogado:{
+      tipo: undefined,
+      username: undefined
+    },
     users: [],
     editedIndex: -1,
     editedItem: {
       name: "",
-      username: ""
+      email: ""
     },
     defaultItem: {
       name: "",
-      username: ""
+      email: ""
     }
   }),
   mounted() {
@@ -73,6 +82,32 @@ export default {
       console.log(response);
       this.users = response;
     });
+      if (this.userLogado.username != null) {
+        this.isUserAutenticado = true;
+      } else {
+        let userUsername = localStorage.getItem("username");
+
+        if (userUsername == null) {
+          console.log("Não esta logado");
+          this.$router.push("/login");
+          return;
+        }
+        console.log(userUsername);
+        this.$axios({
+          method: "get",
+          url: "api/users/" + userUsername,
+          headers: { "Content-Type": "application/json" }
+        })
+                .then(response => {
+                  //console.log(response)
+                  this.userLogado.tipo = response.data.tipo;
+                  this.userLogado.username = response.data.username;
+                })
+                .catch(error => {
+                  console.log(error);
+                  console.log(this.$axios.defaults.headers);
+                });
+      }
   },
   computed: {
     formTitle() {
@@ -125,7 +160,7 @@ export default {
         this.$axios
           .$put("/api/users/" + userName, {
             name: this.editedItem.name,
-            username: this.editedItem.username
+            email: this.editedItem.email
           })
           .then(function(response) {
             console.log("User updated successfully");

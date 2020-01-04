@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="userLogado.tipo == 'ADMINISTRADOR'">
     <v-btn class="ma-2" color="blue darken-2" to="/utilizadores" dark>
       <v-icon dark left>mdi-arrow-left</v-icon>Back
     </v-btn>
@@ -47,9 +47,15 @@
 export default {
   data() {
     return {
+      userLogado:{
+        tipo: undefined,
+        username: undefined
+      },
       username: null,
       password: null,
       name: null,
+      email:null,
+      isUserAutenticado: false,
       nameRules: [
         v => !!v || "Name is required",
         v =>
@@ -77,6 +83,34 @@ export default {
       errorMsg: false
     };
   },
+  mounted(){
+    if (this.userLogado.username != null) {
+  this.isUserAutenticado = true;
+} else {
+  let userUsername = localStorage.getItem("username");
+
+  if (userUsername == null) {
+    console.log("Não esta logado");
+    this.$router.push("/login");
+    return;
+  }
+  console.log(userUsername);
+  this.$axios({
+    method: "get",
+    url: "api/users/" + userUsername,
+    headers: { "Content-Type": "application/json" }
+  })
+          .then(response => {
+            //console.log(response)
+            this.userLogado.tipo = response.data.tipo;
+            this.userLogado.username = response.data.username;
+          })
+          .catch(error => {
+              console.log(error);
+              console.log(this.$axios.defaults.headers);
+            });
+}
+  },
   computed: {
     isUsernameValid() {
       if (!this.username) {
@@ -87,6 +121,7 @@ export default {
 
       return !(usernameLen < 4 || usernameLen > 35);
     },
+
     isPasswordValid() {
       if (!this.password) {
         return null;
@@ -106,12 +141,12 @@ export default {
       return !(nameLen < 3 || nameLen > 30);
     },
     isEmailValid() {
-      if (!this.username) {
+      if (!this.email) {
         return null;
       }
 
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(this.username);
+      return re.test(this.email);
     },
     isTypeValid() {
       if (!this.tipo) {
@@ -154,7 +189,8 @@ export default {
             .$post("/api/users/administradores", {
               username: this.username,
               password: passwordHash,
-              name: this.name
+              name: this.name,
+              email: this.email
             })
             .then(() => {
               this.$router.push("/utilizadores");
@@ -169,7 +205,8 @@ export default {
             .$post("/api/users/treinadores", {
               username: this.username,
               password: passwordHash,
-              name: this.name
+              name: this.name,
+              email: this.email
             })
             .then(() => {
               this.$router.push("/utilizadores");
@@ -183,7 +220,8 @@ export default {
             .$post("/api/users/atletas", {
               username: this.username,
               password: passwordHash,
-              name: this.name
+              name: this.name,
+              email: this.email
             })
             .then(() => {
               this.$router.push("/utilizadores");
@@ -197,7 +235,8 @@ export default {
             .$post("/api/users", {
               username: this.username,
               password: passwordHash,
-              name: this.name
+              name: this.name,
+              email: this.email
             })
             .then(() => {
               this.$router.push("/utilizadores");
