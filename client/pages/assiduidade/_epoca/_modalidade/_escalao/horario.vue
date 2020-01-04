@@ -196,7 +196,7 @@
             }
         },
         created() {
-            this.username='profe1';
+            this.username=localStorage.getItem('username');
             this.route.modalidade = this.$route.params.modalidade;
             this.route.escalao = this.$route.params.escalao;
             this.route.epoca = this.$route.params.epoca;

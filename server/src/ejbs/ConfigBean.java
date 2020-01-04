@@ -95,6 +95,7 @@ public class ConfigBean {
 
             // ESCALAO
             escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
+            escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("TERCA_FEIRA"),"trote",10,12);
 
             // HORARIO
             horarioBean.createAssiduidade("lucho","SUB20","2018-2019",TipoDia.valueOf("SEGUNDA_FEIRA"),10,12,"mario",true);
