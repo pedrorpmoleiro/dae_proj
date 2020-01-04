@@ -5,21 +5,23 @@ import entities.SocioType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-public class SocioDTO implements Serializable {
+public class SocioCreateDTO implements Serializable {
     private long idSocio;
     private String name;
     private String email;
     @Id
     private String username;
     private SocioType tipo;
+    private String password;
 
-    public SocioDTO() {
+    public SocioCreateDTO() {
     }
 
-    public SocioDTO(long idSocio, String name, String email, String username, SocioType tipo) {
+    public SocioCreateDTO(long idSocio, String name, String password, String email, String username, SocioType tipo) {
         this.idSocio = idSocio;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.username = username;
         this.tipo = tipo;
     }
@@ -32,6 +34,13 @@ public class SocioDTO implements Serializable {
         this.idSocio = idSocio;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getName() {
         return name;

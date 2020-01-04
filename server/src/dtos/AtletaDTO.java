@@ -9,7 +9,6 @@ import java.util.Set;
 public class AtletaDTO {
 
     private long idSocio;
-    private String password;
     private String name;
     private String email;
     private Set<Treinador> treinadores;
@@ -20,10 +19,9 @@ public class AtletaDTO {
         this.treinadores = new LinkedHashSet<Treinador>();
     }
 
-    public AtletaDTO(long idSocio, String username, String password, String name, String email) {
+    public AtletaDTO(long idSocio, String username, String name, String email) {
         this.idSocio = idSocio;
         this.username = username;
-        this.password = password;
         this.name = name;
         this.email = email;
         this.treinadores = new LinkedHashSet<Treinador>();
@@ -43,14 +41,6 @@ public class AtletaDTO {
 
     public void setIdSocio(long idSocio) {
         this.idSocio = idSocio;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {

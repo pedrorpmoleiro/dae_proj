@@ -52,7 +52,7 @@
                     password: passwordHash
                 })
                 //console.log(data)
-                axios({method: 'post', url: 'api/users/login', data: data, headers: {'Content-Type': 'application/json'}})
+                this.$axios({method: 'post', url: 'api/users/login', data: data, headers: {'Content-Type': 'application/json'}})
                     .then(response => {
                         console.log('LOGIN')
                         //  this.$root.token=response.data.access_token;
@@ -63,7 +63,7 @@
                     })
                     .catch(error => {
                         console.log(error)
-                        console.log(axios.defaults.headers)
+                        console.log(this.$axios.defaults.headers)
                     })
 
             }
