@@ -5,10 +5,7 @@ import ejbs.AdministradorBean;
 import ejbs.AtletaBean;
 import ejbs.SocioBean;
 import ejbs.TreinadorBean;
-import entities.Administrador;
-import entities.Atleta;
-import entities.Socio;
-import entities.Treinador;
+import entities.*;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 
@@ -16,7 +13,9 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/users")
@@ -49,6 +48,23 @@ public class UserController {
         return socios.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    AtletaProfileDTO toAtletaDTOConEscalaos(Atleta atleta){
+        AtletaProfileDTO atletaProfileDTO = new AtletaProfileDTO();
+        //atletaProfileDTO.setEscaloes(atleta.getEscaloes());
+        for (Escalao escalao:atleta.getEscaloes()) {
+        //EscalaoDTO escalaoDTO= new EscalaoDTO(escalao.getName());
+        atletaProfileDTO.addModalidade(escalao.getModalidade().getNome());
+          atletaProfileDTO.addEscalao(escalao.getName());
+            for (Treinador treinador:escalao.getTreinadores()) {
+                atletaProfileDTO.addTreinador(treinador.getName());
+            }
+        }
+        atletaProfileDTO.setName(atleta.getName());
+        atletaProfileDTO.setEmail(atleta.getEmail());
+        atletaProfileDTO.setIdSocio(atleta.getIdSocio());
+        atletaProfileDTO.setUsername(atleta.getUsername());
+        return  atletaProfileDTO;
+    }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/users/”
@@ -119,7 +135,6 @@ public class UserController {
         }
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
-
 //********************Administrador *****************
     // Converts an entity to a DTO class
     AdministradorDTO toDTO(Administrador administrador) {
@@ -218,14 +233,14 @@ public class UserController {
 
         return Response.status(Response.Status.CREATED).build();
     }
-/*
+
     @GET
     @Path("/atletas/{username}")
     public Response getAtletasDetails(@PathParam("username") String username) {
         Atleta atleta = atletaBean.findAtleta(username);
+        return Response.status(Response.Status.OK).entity(toAtletaDTOConEscalaos(atleta)).build();
+    }
 
-        return Response.status(Response.Status.OK).entity(toDTO(atleta)).build();
-    }*/
    /* @PUT
     @Path("/atletas/{username}")
     public Response updateAtletas(@PathParam("username") String username,AtletaDTO atletaDTO) throws MyEntityExistsException, MyEntityNotFoundException {
