@@ -286,7 +286,7 @@ export default {
           status: status,
           receipt: this.create.receipt
         })
-        .then(response => {
+        .then(() => {
           this.loadingCreate = false;
           this.closeDialog();
           this.alertSuccess = true;
@@ -302,7 +302,7 @@ export default {
     deletePayment(item) {
       this.$axios
         .delete("/api/payments/" + item.code + "/delete")
-        .then(response => {
+        .then(() => {
           this.alertSuccess = true;
           this.getPayments();
         })
