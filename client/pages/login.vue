@@ -43,11 +43,11 @@
                 const hash = crypto.createHash('sha256');
                 hash.update(this.password);
                 var passwordHash = hash.digest('base64');
-                console.log(passwordHash);
+               // console.log(passwordHash);
                 /* axios.post('api/login',{emil:username,password:pass})
                      .then(response=>{console.log('LOGIN')})
                      .catch(error=>{alert("No estas registrado habla bien")})*/
-                /*var data = JSON.stringify({
+                var data = JSON.stringify({
                     username: this.username,
                     password: this.password
                 })
@@ -65,7 +65,7 @@
                         console.log(error)
                         console.log(axios.defaults.headers)
                     })
-*/
+
             }
         }
     }

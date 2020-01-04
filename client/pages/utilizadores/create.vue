@@ -85,6 +85,7 @@ your e-mail"/>-->
 </template>
 
 <script>
+    const crypto = require('crypto');
     export default {
         data() {
             return {
@@ -193,11 +194,14 @@ your e-mail"/>-->
                 this.$refs.form.reset()
             },
             create() {
+                const hash = crypto.createHash('sha256');
+                hash.update(this.password);
+                var passwordHash = hash.digest('base64');
                     switch (this.tipo) {
                         case 'ADMINISTRADOR':
                             this.$axios.$post('/api/users/administradores', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
                                 username: this.username,
                             })
@@ -212,7 +216,7 @@ your e-mail"/>-->
                         case 'TREINADOR':
                             this.$axios.$post('/api/users/treinadores', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
                                 username: this.username,
                             })
@@ -226,7 +230,7 @@ your e-mail"/>-->
                         case 'ATLETA':
                             this.$axios.$post('/api/users/atletas', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
                                 username: this.username,
                             })
@@ -240,7 +244,7 @@ your e-mail"/>-->
                         case 'SOCIO SIMPLE':
                             this.$axios.$post('/api/users', {
                                 username: this.username,
-                                password: this.password,
+                                password: passwordHash,
                                 name: this.name,
                                 username: this.username,
                             })

@@ -7,7 +7,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.Base64;
 
 @Startup
 @Singleton(name = "ConfigEJB")
@@ -39,18 +42,23 @@ public class ConfigBean {
             //escalaoBean.create("SUB22", "BASQUETBALL");
             //escalaoBean.create("SUB19", "BASQUETBALL");
 
+            String password = "123123";
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            String passwordHash = Base64.getEncoder().encodeToString(hash);
+
             /* Admins */
-            administradorBean.create("kenalx1999", "123123", "kevin", "kevin@gmail.com");
-            administradorBean.create("chaca", "123123", "andres", "andres@gmail.com");
-            administradorBean.create("pedrinsky", "123123", "pedro", "pedro@gmail.com");
+            administradorBean.create("kenalx1999", passwordHash, "kevin", "kevin@gmail.com");
+            administradorBean.create("chaca", passwordHash, "andres", "andres@gmail.com");
+            administradorBean.create("pedrinsky", passwordHash, "pedro", "pedro@gmail.com");
 
             /* Treinador */
-            treinadorBean.create("lucho", "456456", "luis", "luis@gmail.com");
-            treinadorBean.create("mateo", "456456", "mateo", "mateo@gmail.com");
+            treinadorBean.create("lucho", passwordHash, "luis", "luis@gmail.com");
+            treinadorBean.create("mateo", passwordHash, "mateo", "mateo@gmail.com");
 
             /*Atleta*/
-            atletaBean.create("mario", "789789", "mario", "mario@gmail.com");
-            atletaBean.create("santiago", "789789", "santiago", "santiago@gmail.com");
+            atletaBean.create("mario", passwordHash, "mario", "mario@gmail.com");
+            atletaBean.create("santiago", passwordHash, "santiago", "santiago@gmail.com");
 
             // PRODUCTS
             productBean.create(1, ProductType.AULA, "123", 24.0);
