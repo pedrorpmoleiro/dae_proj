@@ -27,30 +27,57 @@
                 <v-card>
                     <v-data-table hide-default-footer :headers="headersDia" :items="item.SEGUNDA_FEIRA">
                         <template v-slot:item.horaInicio="{item}">
-                            {{item.horaInicio +'pm'}}
+                            {{item.horaInicio+':00'}}
+                        </template>
+                        <template v-slot:item.horaFim="{item}">
+                            {{item.horaFim+':00'}}
                         </template>
                     </v-data-table>
                 </v-card>
             </template>
             <template v-slot:item.TERCA_FEIRA="{item}">
                 <v-card>
-                    <v-data-table hide-default-footer :headers="headersDia"
-                                  :items="item.TERCA_FEIRA"></v-data-table>
+                    <v-data-table hide-default-footer :headers="headersDia"  :items="item.TERCA_FEIRA">
+                        <template v-slot:item.horaInicio="{item}">
+                            {{item.horaInicio+':00'}}
+                        </template>
+                        <template v-slot:item.horaFim="{item}">
+                            {{item.horaFim+':00'}}
+                        </template>
+                    </v-data-table>
                 </v-card>
             </template>
             <template v-slot:item.QUARTA_FEIRA="{item}">
                 <v-card>
-                    <v-data-table hide-default-footer  :headers="headersDia"
-                                  :items="item.QUARTA_FEIRA"></v-data-table>
+                    <v-data-table hide-default-footer  :headers="headersDia" :items="item.QUARTA_FEIRA">
+                        <template v-slot:item.horaInicio="{item}">
+                            {{item.horaInicio+':00'}}
+                        </template>
+                        <template v-slot:item.horaFim="{item}">
+                            {{item.horaFim+':00'}}
+                        </template>
+                    </v-data-table>
                 </v-card>
             </template>
             <template v-slot:item.QUINTA_FEIRA="{item}">
-                <v-data-table hide-default-footer  :headers="headersDia"
-                              :items="item.QUINTA_FEIRA"></v-data-table>
+                <v-data-table hide-default-footer  :headers="headersDia" :items="item.QUINTA_FEIRA">
+                    <template v-slot:item.horaInicio="{item}">
+                        {{item.horaInicio+':00'}}
+                    </template>
+                    <template v-slot:item.horaFim="{item}">
+                        {{item.horaFim+':00'}}
+                    </template>
+                </v-data-table>
             </template>
             <template v-slot:item.SEXTA_FEIRA="{item}">
-                <v-data-table hide-default-footer  :headers="headersDia"
-                              :items="item.SEXTA_FEIRA"></v-data-table>
+                <v-data-table hide-default-footer  :headers="headersDia"  :items="item.SEXTA_FEIRA">
+                    <template v-slot:item.horaInicio="{item}">
+                        {{item.horaInicio+':00'}}
+                    </template>
+                    <template v-slot:item.horaFim="{item}">
+                        {{item.horaFim+':00'}}
+                    </template>
+                </v-data-table>
             </template>
         </v-data-table>
 
@@ -167,6 +194,11 @@
                             this.convertArray();
                         })
                 })
+            }
+        },
+        computed:{
+            getHora(hora){
+                return hora>12&&hora<23?hora+'pm':hora+'am'
             }
         }
     }
