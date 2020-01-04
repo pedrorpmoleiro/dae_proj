@@ -44,7 +44,7 @@ module.exports = {
   modules: [
     // Doc: https://bootstrap-vue.js.org/docs/
     '@nuxtjs/axios'
-     ],
+  ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

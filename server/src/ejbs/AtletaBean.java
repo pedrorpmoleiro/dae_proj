@@ -31,14 +31,26 @@ public class AtletaBean {
             System.out.println("Server error");
         }
     }
+/*
+    public void remove(String username)throws MyEntityExistsException {
 
-    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException{
+        try {
+            Atleta atleta = em.find(Atleta.class, username);
+            if (atleta != null) {
+                atleta.setDelete(true);
+                em.persist(atleta);
+            } else {
+                throw new MyEntityExistsException("Error: User dont exists");
+            }
+        }catch (Exception e){
+            System.out.println("Server error");
+        }
+    }
+    public void update(String username, String name, String email) throws MyEntityNotFoundException{
         Atleta atleta = em.find(Atleta.class, username);
         if (atleta != null) {
             em.lock(atleta, LockModeType.OPTIMISTIC);
 
-            atleta.setUsername(username);
-            atleta.setPassword(password);
             atleta.setName(name);
             atleta.setEmail(email);
 
@@ -46,7 +58,7 @@ public class AtletaBean {
         }else{
             throw new MyEntityNotFoundException("Atleta not found");
         }
-    }
+    }*/
 
     public List<Atleta> all() {
         try {

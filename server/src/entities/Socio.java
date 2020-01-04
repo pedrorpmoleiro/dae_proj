@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllSocios",
-                query = "SELECT s FROM Socio s ORDER BY s.idSocio" // JPQL
+                query = "SELECT s FROM Socio s WHERE s.delete=false ORDER BY s.idSocio" // JPQL
         )
 })
 @Table(name="SOCIOS")
@@ -30,6 +30,9 @@ public class Socio {
     private String email;
     @NotNull
     private SocioType tipo;
+    @NotNull
+    private boolean delete;
+
 
     public Socio(String username,String password, String name, String email) {
         this.password = password;
@@ -37,9 +40,12 @@ public class Socio {
         this.email = email;
         this.username = username;
         this.tipo = SocioType.NORMAL;
+        this.delete = false;
     }
 
     public Socio() {
+        this.tipo = SocioType.NORMAL;
+        this.delete = false;
     }
 
     public SocioType getTipo() {
@@ -88,5 +94,13 @@ public class Socio {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 }
