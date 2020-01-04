@@ -3,6 +3,7 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 
@@ -15,13 +16,26 @@ import java.io.Serializable;
 
 public class Atleta extends Socio implements Serializable {
 
-      /*  @ManyToMany(mappedBy = "socios")
-        private Set<Treinador> treinadores;*/
-        public Atleta() {
-        }
+    /*  @ManyToMany(mappedBy = "socios")
+      private Set<Treinador> treinadores;*/
+    @ManyToOne
+    @JoinColumn(name = "ESCALAO_CODE")
+    private Escalao escalao;
 
-    public Atleta( String username,String password, String name, String email) {
-        super( username,password, name, email);
+    public Atleta() {
+    }
+
+    public Atleta(String username, String password, String name, String email) {
+        super(username, password, name, email);
         setTipo(SocioType.ATLETA);
+        this.escalao = null;
+    }
+
+    public Escalao getEscalao() {
+        return escalao;
+    }
+
+    public void setEscalao(Escalao escalao) {
+        this.escalao = escalao;
     }
 }

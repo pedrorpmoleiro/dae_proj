@@ -1,5 +1,7 @@
 package ejbs;
 
+import entities.Epoca;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -12,17 +14,47 @@ public class ConfigBean {
     private ModalidadeBean modalidadeBean;
     @EJB
     private EscalaoBean escalaoBean;
+    @EJB
+    private EpocaBean epocaBean;
+    @EJB
+    private AtletaBean atletaBean;
+    @EJB
+    private TreinadorBean treinadorBean;
     public ConfigBean() {
     }
 
     @PostConstruct
     public void populateDB(){
         try{
-            modalidadeBean.create("BASQUETBALL");
-            modalidadeBean.create("FOOTEBOLL");
-            escalaoBean.create("SUB20","BASQUETBALL");
-            escalaoBean.create("SUB22","BASQUETBALL");
-            escalaoBean.create("SUB19","BASQUETBALL");
+            //Epoca
+            epocaBean.create("2018-2019");
+            epocaBean.create("2019-2020");
+
+            //Modalidades
+            modalidadeBean.create("BASQUETBALL","2018-2019");
+            modalidadeBean.create("BASQUETBALL","2019-2020");
+
+
+            //Escalao
+            escalaoBean.create("SUB20","BASQUETBALL","2018-2019");
+            escalaoBean.create("SUB20","BASQUETBALL","2019-2020");
+
+            //Atleta
+            atletaBean.create("kevin20","123","Kevin","kevin@mail.pt");
+            atletaBean.create("pedro1","123","Pedro","pedro@mail.pt");
+
+
+            //TODO Treinador
+            treinadorBean.create("profe1","123","KingMarco","king@mail.pt");
+            treinadorBean.create("profe2","123","KingMarco","king1@mail.pt");
+
+            //entroll Atleta-Modalidade
+
+
+            modalidadeBean.enrollAtletaEscalao("SUB20","kevin20","2018-2019","BASQUETBALL");
+            modalidadeBean.enrollTreinadorEscalao("SUB20","profe1","2018-2019","BASQUETBALL");
+
+
 
         }catch (Exception e){
             System.err.println(e.getMessage());

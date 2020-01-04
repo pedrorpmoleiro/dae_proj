@@ -1,5 +1,6 @@
 package entities;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -20,26 +21,25 @@ public class Modalidade implements Serializable {
     private Set<Treinador> treinadores;
     */
     @Id
+    @GeneratedValue (strategy=GenerationType.SEQUENCE)
+    private long code;
     private String nome;
     @OneToMany(mappedBy = "modalidade", cascade = CascadeType.REMOVE)
     private Set<Escalao> escaloes;
-    @ManyToMany
-    @JoinTable(name = "EPOCA_MODALIDADE",
-            joinColumns = @JoinColumn(name = "MODALIDADE_NOME",referencedColumnName = "CODE"),
-            inverseJoinColumns
-                    = @JoinColumn(name = "EPOCA_NOME",referencedColumnName = "USERNAME"))
-    private Set<Epoca> epocas;
+    @ManyToOne
+    @JoinColumn(name = "EPOCA_NOME")
+    private Epoca epoca;
 
-    public Modalidade(String nome) {
+    public Modalidade(String nome,Epoca epoca) {
         //  this.socios = new LinkedList<Socio>();
         //   this.treinadores = new LinkedHashSet<>();
         this.nome = nome;
         this.escaloes = new LinkedHashSet<>();
-        this.epocas=new LinkedHashSet<>();
+        this.epoca=epoca;
     }
 
     public Modalidade() {
-        this("");
+        this("",null);
     }
 
 
@@ -59,13 +59,22 @@ public class Modalidade implements Serializable {
         this.escaloes = escaloes;
     }
 
-    public Set<Epoca> getEpocas() {
-        return epocas;
+    public Epoca getEpoca() {
+        return epoca;
     }
 
-    public void setEpocas(Set<Epoca> epocas) {
-        this.epocas = epocas;
+    public void setEpoca(Epoca epoca) {
+        this.epoca = epoca;
     }
+
+    public long getCode() {
+        return code;
+    }
+
+    public void setCode(long code) {
+        this.code = code;
+    }
+
 //----------------------------------------ESCALAO---------------------------------
 
     public void addEscalao(Escalao esc) {
@@ -80,16 +89,6 @@ public class Modalidade implements Serializable {
         }
     }
     //------------------------------EPOCA--------------------------------------
-    public void addEpoca(Epoca epoca) {
-        if (!epocas.contains(epoca)) {
-            epocas.add(epoca);
-        }
-    }
-    public void removeEpoca(Epoca epoca) {
-        if (epocas.contains(epoca)) {
-            epocas.remove(epoca);
-        }
-    }
 }
 /*
 //--------------------------------------SOCIO-----------------------------
