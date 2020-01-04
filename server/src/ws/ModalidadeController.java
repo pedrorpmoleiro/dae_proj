@@ -1,10 +1,7 @@
 package ws;
 
 import dtos.*;
-import ejbs.EpocaBean;
-import ejbs.EscalaoBean;
-import ejbs.ModalidadeBean;
-import ejbs.TreinadorBean;
+import ejbs.*;
 import entities.*;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -31,6 +28,8 @@ public class ModalidadeController {
     private EscalaoBean escalaoBean;
     @EJB
     private TreinadorBean treinadorBean;
+    @EJB
+    private HorarioBean horarioBean;
 //region TODO DTO sin listas
     //Modalidades
     ModalidadeDTO toModalidadeDTONoEscaloes(Modalidade modalidade){
@@ -116,6 +115,20 @@ public class ModalidadeController {
         return  horarioDTO;
     }
     //endregion
+    //region AULA
+    AssiduidadeDTO toAssiduidadeDTO(Assiduidade assiduidade){
+        return new AssiduidadeDTO(assiduidade.getUsername(),assiduidade.isAssiteu());
+    }
+    Set<AssiduidadeDTO> toAssiduidadeDTOs(Set<Assiduidade> assiduidades){
+        return assiduidades.stream().map(this::toAssiduidadeDTO).collect(Collectors.toSet());
+    }
+    AulaDTO toAulaDTOconAssitude(Aula aula){
+        AulaDTO aulaDTO=new AulaDTO(aula.getDia().getDiaType().toString(),aula.getDescription(),aula.getHoraInicio(),aula.getHoraFim());
+        aulaDTO.setAssistudes(toAssiduidadeDTOs(aula.getAssiduidades()));
+        return aulaDTO;
+    }
+    //
+
     //region
     AssistudePageDTO toAAssistudePageDTO(Treinador treinador){
         AssistudePageDTO assistudePageDTO=new AssistudePageDTO();
@@ -168,6 +181,14 @@ public class ModalidadeController {
         return  Response.status(Response.Status.OK)
                 .entity(toHorarioDTO(escalao1.getHorario()))
                 .build();
+    }
+
+    @GET
+        @Path("{usernameT}/{escalao}/{epoca}/{dia}/{horaInicio}/{horaFim}/aula")
+    public Response getAula(@PathParam("usernameT") String treinador,@PathParam("escalao") String escalao,@PathParam("epoca") String espoca,
+                            @PathParam("dia") String dia,@PathParam("horaInicio") String hInicio,@PathParam("horaFim") String hFim) throws MyEntityNotFoundException,Exception{
+        Aula aula = horarioBean.findAulaTreinador(treinador,escalao,espoca,TipoDia.valueOf(dia),Integer.parseInt(hInicio),Integer.parseInt(hFim));
+        return  Response.status(Response.Status.OK).entity(toAulaDTOconAssitude(aula)).build();
     }
 
 //endregion
@@ -228,6 +249,21 @@ public class ModalidadeController {
         return  Response.status(Response.Status.OK).build();
     }
 
+    //TODO crear asistencia
+    @POST
+    @Path("/{usernameT}/{escalao}/{epoca}/{dia}/{horaInicio}/{horaFim}")
+    public Response crearAsistencia(@PathParam("usernameT") String treinador,@PathParam("escalao") String escalao,@PathParam("epoca") String espoca,
+                                    @PathParam("dia") String dia,@PathParam("horaInicio") String hInicio,@PathParam("horaFim") String hFim,AssiduidadeDTO assiduidadeDTO) throws MyEntityExistsException, MyEntityNotFoundException, Exception{
+        boolean asistencia;
+        if(assiduidadeDTO.getAssistude().equals("COMPARECEU")){
+            asistencia=true;
+        }else{
+            asistencia=false;
+        }
+        horarioBean.createAssiduidade(treinador,escalao,espoca,TipoDia.valueOf(dia),Integer.parseInt(hInicio),Integer.parseInt(hFim),assiduidadeDTO.getUsername(),asistencia);
+        Aula aula= horarioBean.findAulaTreinador(treinador,escalao,espoca,TipoDia.valueOf(dia),Integer.parseInt(hInicio),Integer.parseInt(hFim));
+        return  Response.status(Response.Status.OK).entity(toAulaDTOconAssitude(aula)).build();
+    }
 
     //endregion
 //region ACTUALIZAR

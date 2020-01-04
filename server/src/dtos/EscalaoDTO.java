@@ -43,4 +43,20 @@ public class EscalaoDTO {
     public void setTreinadores(Set<TreinadorDTO> treinadores) {
         this.treinadores = treinadores;
     }
+
+    public String getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(String modalidade) {
+        this.modalidade = modalidade;
+    }
+
+    public String getEpoca() {
+        return epoca;
+    }
+
+    public void setEpoca(String epoca) {
+        this.epoca = epoca;
+    }
 }
