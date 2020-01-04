@@ -24,7 +24,7 @@
             </v-card>
 
         </v-dialog>
-        <v-dialog v-model="dialogEscaloes" width="600px">
+        <v-dialog v-model="dialogEscaloes" width="650px">
             <v-card max-height="500px">
                 <v-data-table hide-default-footer :items="escaloes" :headers="headersEscalao">
                     <template v-slot:top>
@@ -43,6 +43,7 @@
                         <v-btn :to="`/modalidades/${epocaSelected.nome}/${modalidadeSelected}/${item.name}`"
                                color="green">Ver Atletas e Treinadores
                         </v-btn>
+                        <v-btn color="cyan" :to="`/modalidades/${epocaSelected.nome}/${modalidadeSelected}/${item.name}/horario`">Horario</v-btn>
                     </template>
                 </v-data-table>
             </v-card>
@@ -287,9 +288,6 @@
                 this.$axios.get("/api/modalidades")
                     .then(r => {
                         this.epocas = r.data;
-                        var lenght = this.epocas.length;
-
-
                     })
             },
             getEscalao: function (modalidade) {

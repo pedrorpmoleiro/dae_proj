@@ -91,6 +91,28 @@ public class ModalidadeController {
         return treinadores.stream().map(this::toTreinadorDTO).collect(Collectors.toSet());
     }
     //endregion
+    //region HORARIO
+    AulaDTO toAulaDTO(Aula aula){
+        AulaDTO aulaDTO=new AulaDTO(aula.getDia().getDiaType().toString(),aula.getDescription(),aula.getHoraInicio(),aula.getHoraFim());
+        return aulaDTO;
+    }
+    Set<AulaDTO> toAulaDTOs(Set<Aula> aulas){
+        return aulas.stream().map(this::toAulaDTO).collect(Collectors.toSet());
+    }
+    DiaDTO toDiaDTO(Dia dia){
+        DiaDTO diaDTO=new DiaDTO(dia.getDiaType().toString());
+        diaDTO.setAulas(toAulaDTOs(dia.getAulas()));
+        return diaDTO;
+    }
+    List<DiaDTO> toDiaDTOs(List<Dia> dias){
+        return dias.stream().map(this::toDiaDTO).collect(Collectors.toList());
+    }
+    HorarioDTO toHorarioDTO(Horario horario){
+        HorarioDTO horarioDTO=new HorarioDTO();
+        horarioDTO.setDias(toDiaDTOs(horario.getDias()));
+        return  horarioDTO;
+    }
+    //endregion
 //endregion
 //region LISTAR GET
     @GET // means: to call this endpoint, we need to use the verb get
@@ -127,6 +149,14 @@ public class ModalidadeController {
         Escalao escalao1 = escalaoBean.findEscalao(epoca,modalidade,escalao);
         return  Response.status(Response.Status.OK)
                 .entity(toEscalaoDTONoSocios(escalao1))
+                .build();
+    }
+    @GET
+    @Path("{epoca}/{modalidade}/{escalao}/horario")
+    public Response getEscalaoHorario(@PathParam("epoca") String epoca,@PathParam("modalidade") String modalidade,@PathParam("escalao") String escalao) throws MyEntityNotFoundException,Exception{
+        Escalao escalao1 = escalaoBean.findEscalao(epoca,modalidade,escalao);
+        return  Response.status(Response.Status.OK)
+                .entity(toHorarioDTO(escalao1.getHorario()))
                 .build();
     }
 
@@ -178,6 +208,14 @@ public class ModalidadeController {
         return  Response.status(Response.Status.OK)
                 .entity(toEscalaoDTOConSocios(escalao1))
                 .build();
+    }
+    //TODO crear aula horario
+
+    @POST
+    @Path("/{epoca}/{modalidade}/{escalao}")
+    public Response crearAula(@PathParam("epoca") String epoca,@PathParam("modalidade") String modalidade,@PathParam("escalao") String escalao,AulaDTO aulaDTO) throws MyEntityExistsException, MyEntityNotFoundException, Exception{
+        escalaoBean.createAula(epoca,modalidade,escalao,TipoDia.valueOf(aulaDTO.getDia()),aulaDTO.getDescription(),aulaDTO.getHoraInicio(),aulaDTO.getHoraFim());
+        return  Response.status(Response.Status.OK).build();
     }
 
 

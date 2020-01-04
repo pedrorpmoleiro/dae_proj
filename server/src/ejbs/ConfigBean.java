@@ -1,6 +1,7 @@
 package ejbs;
 
 import entities.Epoca;
+import entities.TipoDia;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -37,6 +38,9 @@ public class ConfigBean {
 
             //Escalao
             escalaoBean.create("SUB20","BASQUETBALL","2018-2019");
+            escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
+            //escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20", TipoDia.SEGUNDA_FEIRA);
+            /*
             escalaoBean.create("SUB20","BASQUETBALL","2019-2020");
 
             //Atleta
@@ -53,7 +57,7 @@ public class ConfigBean {
 
             modalidadeBean.enrollAtletaEscalao("SUB20","kevin20","2018-2019","BASQUETBALL");
             modalidadeBean.enrollTreinadorEscalao("SUB20","profe1","2018-2019","BASQUETBALL");
-
+*/
 
 
         }catch (Exception e){

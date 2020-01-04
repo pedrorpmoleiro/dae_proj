@@ -20,11 +20,16 @@ public class Escalao {
     @OneToMany(mappedBy = "escalao", cascade = CascadeType.REMOVE)
     private Set<Treinador> treinadores;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "horario_id", referencedColumnName = "id")
+    private  Horario horario;
+
     public Escalao(Modalidade modalidade, String name) {
         this.modalidade = modalidade;
         this.name = name;
         this.treinadores=new LinkedHashSet<>();
         this.atletas=new LinkedHashSet<>();
+        this.horario=null;
     }
     public  Escalao(){
         this(null,"");
@@ -100,5 +105,13 @@ public class Escalao {
         if(this.treinadores.contains(treinador)){
             treinadores.remove(treinador);
         }
+    }
+
+    public Horario getHorario() {
+        return horario;
+    }
+
+    public void setHorario(Horario horario) {
+        this.horario = horario;
     }
 }
