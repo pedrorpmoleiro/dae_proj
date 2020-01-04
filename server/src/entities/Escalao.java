@@ -15,9 +15,9 @@ public class Escalao {
     @JoinColumn(name = "MODALIDADE_CODE")
     private Modalidade modalidade;
     private String name;
-    @OneToMany(mappedBy = "escalao", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "escaloes")
     private Set<Atleta> atletas;
-    @OneToMany(mappedBy = "escalao", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "escaloes")
     private Set<Treinador> treinadores;
 
     @OneToOne(cascade = CascadeType.ALL)

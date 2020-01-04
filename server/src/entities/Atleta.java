@@ -3,6 +3,7 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -18,9 +19,12 @@ public class Atleta extends Socio implements Serializable {
 
     /*  @ManyToMany(mappedBy = "socios")
       private Set<Treinador> treinadores;*/
-    @ManyToOne
-    @JoinColumn(name = "ESCALAO_CODE")
-    private Escalao escalao;
+    @ManyToMany
+    @JoinTable(name = "ESCALAO_ATLETA",
+            joinColumns = @JoinColumn(name = "ATLETA_USERNAME",referencedColumnName = "USERNAME"),
+            inverseJoinColumns
+                    = @JoinColumn(name = "ESCALAO_ID",referencedColumnName = "CODE"))
+    private Set<Escalao> escaloes;
 
     public Atleta() {
     }
@@ -28,14 +32,19 @@ public class Atleta extends Socio implements Serializable {
     public Atleta(String username, String password, String name, String email) {
         super(username, password, name, email);
         setTipo(SocioType.ATLETA);
-        this.escalao = null;
+        this.escaloes = new LinkedHashSet<>();
     }
 
-    public Escalao getEscalao() {
-        return escalao;
+    public Set<Escalao> getEscaloes() {
+        return escaloes;
     }
 
-    public void setEscalao(Escalao escalao) {
-        this.escalao = escalao;
+    public void setEscaloes(Set<Escalao> escaloes) {
+        this.escaloes = escaloes;
+    }
+    public void addEscalao(Escalao escalao){
+        if(!this.escaloes.contains(escalao)){
+            escaloes.add(escalao);
+        }
     }
 }

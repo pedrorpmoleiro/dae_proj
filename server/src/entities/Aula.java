@@ -3,6 +3,9 @@ package entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="AULAS")
@@ -19,12 +22,15 @@ public class Aula implements Serializable {
     private int horaInicio;
     @NotNull
     private int horaFim;
+    @OneToMany(mappedBy = "aula", cascade = CascadeType.REMOVE )
+    private Set<Assiduidade> assiduidades;
 
     public Aula(String description, int horaInicio, int horaFim) {
         this.description = description;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
         this.dia=null;
+        this.assiduidades=new LinkedHashSet<>();
     }
     public Aula(){
 
@@ -67,5 +73,18 @@ public class Aula implements Serializable {
 
     public void setHoraFim(int horaFim) {
         this.horaFim = horaFim;
+    }
+    public void addAssiduidade(Assiduidade assiduidade){
+        if(!this.assiduidades.contains(assiduidade)){
+            this.assiduidades.add(assiduidade);
+        }
+    }
+
+    public Set<Assiduidade> getAssiduidades() {
+        return assiduidades;
+    }
+
+    public void setAssiduidades(Set<Assiduidade> assiduidades) {
+        this.assiduidades = assiduidades;
     }
 }

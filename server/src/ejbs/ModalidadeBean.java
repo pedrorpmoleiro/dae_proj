@@ -137,7 +137,7 @@ public class ModalidadeBean {
                     if(escalao!=null){
                         Atleta atleta= (Atleta) em.find(Atleta.class,username);
                         if(atleta!=null){
-                            atleta.setEscalao(escalao);
+                            atleta.addEscalao(escalao);
                             escalao.addAtleta(atleta);
                         }else{
                             throw new MyEntityNotFoundException("ATLETA_NOT_FOUND");
@@ -181,7 +181,7 @@ public class ModalidadeBean {
                     if(escalao!=null){
                         Treinador treinador= (Treinador) em.find(Treinador.class,username);
                         if(treinador!=null){
-                            treinador.setEscalao(escalao);
+                            treinador.addEscalao(escalao);
                             escalao.addTreinador(treinador);
                         }else{
                             throw new MyEntityNotFoundException("ATLETA_NOT_FOUND");
