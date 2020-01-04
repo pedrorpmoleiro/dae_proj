@@ -10,7 +10,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllAtletas",
-                query = "SELECT a FROM Atleta a ORDER BY a.idSocio" // JPQL
+                query = "SELECT a FROM Atleta a WHERE a.delete=false  ORDER BY a.idSocio" // JPQL
         )
 })
 

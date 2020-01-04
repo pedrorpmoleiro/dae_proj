@@ -33,14 +33,26 @@ public class AdministradorBean {
             System.out.println("Server error");
         }
     }
+    /*
+    public void remove(String username)throws MyEntityExistsException {
 
-    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException{
+        try {
+            Administrador administrador = em.find(Administrador.class, username);
+            if (administrador != null) {
+                administrador.setDelete(true);
+                em.persist(administrador);
+            } else {
+                throw new MyEntityExistsException("Error: Administrador dont exists");
+            }
+        }catch (Exception e){
+            System.out.println("Server error");
+        }
+    }
+    public void update(String username, String name, String email) throws MyEntityNotFoundException{
         Administrador administrador = em.find(Administrador.class, username);
         if (administrador != null) {
             em.lock(administrador, LockModeType.OPTIMISTIC);
 
-                administrador.setUsername(username);
-                administrador.setPassword(password);
                 administrador.setName(name);
                 administrador.setEmail(email);
 
@@ -48,7 +60,7 @@ public class AdministradorBean {
         }else{
             throw new MyEntityNotFoundException("Admin not found");
         }
-    }
+    }*/
 
     public List<Administrador> all() {
         try {

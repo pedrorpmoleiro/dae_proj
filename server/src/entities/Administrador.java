@@ -10,7 +10,7 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllAdministradores",
-                query = "SELECT a FROM Administrador a ORDER BY a.idSocio" // JPQL
+                query = "SELECT a FROM Administrador a WHERE a.delete=false  ORDER BY a.idSocio" // JPQL
         )
 })
 

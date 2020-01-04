@@ -16,14 +16,14 @@ public class SocioBean {
 
     @PersistenceContext
     EntityManager em;
-/*
+
     public void create(String username,String password, String name, String email)throws MyEntityExistsException {
 
         try {
-            Administrador administrador = em.find(Administrador.class, username);
-            if (administrador == null) {
-                administrador = new Administrador(username,password, name, email);
-                em.persist(administrador);
+            Socio socio = em.find(Socio.class, username);
+            if (socio == null) {
+                socio = new Socio(username,password, name, email);
+                em.persist(socio);
             } else {
                 throw new MyEntityExistsException("Invalid Username: Username in use");
             }
@@ -32,21 +32,36 @@ public class SocioBean {
         }
     }
 
-    public void update(String username, String password, String name, String email) throws MyEntityNotFoundException {
-        Administrador administrador = em.find(Administrador.class, username);
-        if (administrador != null) {
-            em.lock(administrador, LockModeType.OPTIMISTIC);
+    public boolean remove(String username)throws MyEntityExistsException {
 
-            administrador.setUsername(username);
-            administrador.setPassword(password);
-            administrador.setName(name);
-            administrador.setEmail(email);
-
-            em.persist(administrador);
-        }else{
-            throw new MyEntityNotFoundException("Admin not found");
+        try {
+            Socio socio = em.find(Socio.class, username);
+            if (socio != null) {
+                socio.setDelete(true);
+                em.persist(socio);
+                return true;
+            } else {
+                throw new MyEntityExistsException("Error: User dont exists");
+            }
+        }catch (Exception e){
+            System.out.println("Server error");
         }
-    }*/
+        return false;
+    }
+    public void update(String username, String name, String email) throws MyEntityNotFoundException{
+        Socio socio = em.find(Socio.class, username);
+        if (socio != null) {
+            em.lock(socio, LockModeType.PESSIMISTIC_WRITE);
+
+            socio.setName(name);
+            socio.setEmail(email);
+
+            em.persist(socio);
+        }else{
+            throw new MyEntityNotFoundException("Socio not found");
+        }
+    }
+
 
     public List<Socio> all() {
         try {
