@@ -21,6 +21,8 @@ public class ConfigBean {
     private AtletaBean atletaBean;
     @EJB
     private TreinadorBean treinadorBean;
+    @EJB
+    private HorarioBean horarioBean;
     public ConfigBean() {
     }
 
@@ -54,7 +56,7 @@ public class ConfigBean {
             modalidadeBean.enrollAtletaEscalao("SUB20","kevin20","2018-2019","BASQUETBALL");
             modalidadeBean.enrollTreinadorEscalao("SUB20","profe1","2018-2019","BASQUETBALL");
             escalaoBean.createAula("2018-2019","BASQUETBALL","SUB20",TipoDia.valueOf("SEGUNDA_FEIRA"),"pilates",10,12);
-
+            horarioBean.createAssiduidade("profe1","SUB20","2018-2019",TipoDia.valueOf("SEGUNDA_FEIRA"),10,12,"kevin20",true);
 
 
         }catch (Exception e){

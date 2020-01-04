@@ -4,6 +4,7 @@ import dtos.*;
 import ejbs.EpocaBean;
 import ejbs.EscalaoBean;
 import ejbs.ModalidadeBean;
+import ejbs.TreinadorBean;
 import entities.*;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
@@ -28,6 +29,8 @@ public class ModalidadeController {
     private EpocaBean epocaBean;
     @EJB
     private EscalaoBean escalaoBean;
+    @EJB
+    private TreinadorBean treinadorBean;
 //region TODO DTO sin listas
     //Modalidades
     ModalidadeDTO toModalidadeDTONoEscaloes(Modalidade modalidade){
@@ -38,7 +41,7 @@ public class ModalidadeController {
     }
     //region ESCALAO
     EscalaoDTO toEscalaoDTONoSocios(Escalao escalao){
-        return new EscalaoDTO(escalao.getName());
+        return new EscalaoDTO(escalao.getName(),escalao.getModalidade().getNome(),escalao.getModalidade().getEpoca().getNome());
     }
     Set<EscalaoDTO> toEscalaoDTOsNoSocios(Set<Escalao> escaloes){
         return escaloes.stream().map(this::toEscalaoDTONoSocios).collect(Collectors.toSet());
@@ -69,7 +72,7 @@ public class ModalidadeController {
     //endregion
     //region ESCALAO
     EscalaoDTO toEscalaoDTOConSocios(Escalao escalao){
-        EscalaoDTO escalaoDTO= new EscalaoDTO(escalao.getName());
+        EscalaoDTO escalaoDTO= new EscalaoDTO(escalao.getName(),escalao.getModalidade().getNome(),escalao.getModalidade().getEpoca().getNome());
         escalaoDTO.setAtletas(toAtletaDTOs(escalao.getAtletas()));
         escalaoDTO.setTreinadores(toTreinadorDTOs(escalao.getTreinadores()));
         return  escalaoDTO;
@@ -111,6 +114,13 @@ public class ModalidadeController {
         HorarioDTO horarioDTO=new HorarioDTO();
         horarioDTO.setDias(toDiaDTOs(horario.getDias()));
         return  horarioDTO;
+    }
+    //endregion
+    //region
+    AssistudePageDTO toAAssistudePageDTO(Treinador treinador){
+        AssistudePageDTO assistudePageDTO=new AssistudePageDTO();
+        assistudePageDTO.setEscaloes(toEscalaoDTOsNoSocios(treinador.getEscaloes()));
+        return  assistudePageDTO;
     }
     //endregion
 //endregion
@@ -248,6 +258,17 @@ public class ModalidadeController {
         return Response.status(Response.Status.OK).build();
     }
 //endregion
+
+    //region LISTAR POR SOCIO
+    @GET
+    @Path("{username}/escaloes/treinador")
+    public Response getEscaloesBySocio(@PathParam("username") String username) throws MyEntityNotFoundException,Exception{
+        Treinador treinador = treinadorBean.findTreinador(username);
+        return  Response.status(Response.Status.OK)
+                .entity(toAAssistudePageDTO(treinador))
+                .build();
+    }
+    //endregion
 
 
 

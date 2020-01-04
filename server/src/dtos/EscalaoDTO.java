@@ -7,14 +7,18 @@ public class EscalaoDTO {
     private String name;
     private Set<AtletaDTO> atletas;
     private Set<TreinadorDTO> treinadores;
+    private String modalidade;
+    private String epoca;
 
-    public EscalaoDTO( String name) {
+    public EscalaoDTO( String name,String modalidade,String epoca) {
         this.name = name;
         this.atletas=new LinkedHashSet<>();
         this.treinadores=new LinkedHashSet<>();
+        this.modalidade=modalidade;
+        this.epoca=epoca;
     }
     public EscalaoDTO(){
-        this("");
+        this("","","");
     }
     public String getName() {
         return name;
