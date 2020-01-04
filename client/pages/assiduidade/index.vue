@@ -23,7 +23,7 @@
        }
      },
         mounted() {
-                this.username='profe1';
+                this.username=localStorage.getItem('username')
                 this.getEscaloes();
         },
         methods:{
