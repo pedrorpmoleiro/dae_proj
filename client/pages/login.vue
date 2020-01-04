@@ -49,15 +49,15 @@
                      .catch(error=>{alert("No estas registrado habla bien")})*/
                 var data = JSON.stringify({
                     username: this.username,
-                    password: this.password
+                    password: passwordHash
                 })
                 //console.log(data)
                 axios({method: 'post', url: 'api/users/login', data: data, headers: {'Content-Type': 'application/json'}})
                     .then(response => {
                         console.log('LOGIN')
                         //  this.$root.token=response.data.access_token;
-                        localStorage.token = response.data.access_token
-                        this.$router.push('/welcome')
+                        //localStorage.token = response.data.access_token
+                        //this.$router.push('/welcome')
                         //window.axios.defaults.headers.common['Authorization']=`Bearer ${localStorage.token}`
 
                     })
