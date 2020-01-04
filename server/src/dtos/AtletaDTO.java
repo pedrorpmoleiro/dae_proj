@@ -1,5 +1,6 @@
 package dtos;
 
+import entities.Escalao;
 import entities.Treinador;
 
 import javax.persistence.Id;
@@ -9,24 +10,40 @@ import java.util.Set;
 public class AtletaDTO {
 
     private long idSocio;
-    private String password;
     private String name;
     private String email;
-    private Set<Treinador> treinadores;
+    //private Set<Treinador> treinadores;
     @Id
     private String username;
+    private Set<Escalao> escaloes;
 
     public AtletaDTO() {
-        this.treinadores = new LinkedHashSet<Treinador>();
+        //this.treinadores = new LinkedHashSet<Treinador>();
     }
 
-    public AtletaDTO(long idSocio, String username, String password, String name, String email) {
+    public AtletaDTO(long idSocio, String username, String name, String email) {
         this.idSocio = idSocio;
         this.username = username;
-        this.password = password;
         this.name = name;
         this.email = email;
-        this.treinadores = new LinkedHashSet<Treinador>();
+        this.escaloes = new LinkedHashSet<Escalao>();
+        //this.treinadores = new LinkedHashSet<Treinador>();
+    }
+    public AtletaDTO(long idSocio, String username, String name, String email,LinkedHashSet<Escalao> escaloes) {
+        this.idSocio = idSocio;
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.escaloes = escaloes;
+        //this.treinadores = new LinkedHashSet<Treinador>();
+    }
+
+    public Set<Escalao> getEscaloes() {
+        return escaloes;
+    }
+
+    public void setEscaloes(Set<Escalao> escaloes) {
+        this.escaloes = escaloes;
     }
 
     public String getUsername() {
@@ -45,14 +62,6 @@ public class AtletaDTO {
         this.idSocio = idSocio;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getName() {
         return name;
     }
@@ -69,11 +78,11 @@ public class AtletaDTO {
         this.email = email;
     }
 
-    public Set<Treinador> getTreinadores() {
+  /*  public Set<Treinador> getTreinadores() {
         return treinadores;
     }
 
     public void setTreinadores(Set<Treinador> treinadores) {
         this.treinadores = treinadores;
-    }
+    }*/
 }

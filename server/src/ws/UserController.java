@@ -1,17 +1,11 @@
 package ws;
 
-import dtos.AdministradorDTO;
-import dtos.AtletaDTO;
-import dtos.SocioDTO;
-import dtos.TreinadorDTO;
+import dtos.*;
 import ejbs.AdministradorBean;
 import ejbs.AtletaBean;
 import ejbs.SocioBean;
 import ejbs.TreinadorBean;
-import entities.Administrador;
-import entities.Atleta;
-import entities.Socio;
-import entities.Treinador;
+import entities.*;
 import exceptions.MyEntityExistsException;
 import exceptions.MyEntityNotFoundException;
 
@@ -19,7 +13,9 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/users")
@@ -40,7 +36,6 @@ public class UserController {
     SocioDTO toDTO(Socio socio) {
         return new SocioDTO(
                 socio.getIdSocio(),
-                socio.getPassword(),
                 socio.getName(),
                 socio.getEmail(),
                 socio.getUsername(),
@@ -53,6 +48,41 @@ public class UserController {
         return socios.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    AtletaProfileDTO toAtletaDTOConEscalaos(Atleta atleta){
+        AtletaProfileDTO atletaProfileDTO = new AtletaProfileDTO();
+        //atletaProfileDTO.setEscaloes(atleta.getEscaloes());
+        for (Escalao escalao:atleta.getEscaloes()) {
+        //EscalaoDTO escalaoDTO= new EscalaoDTO(escalao.getName());
+        atletaProfileDTO.addModalidade(escalao.getModalidade().getNome());
+          atletaProfileDTO.addEscalao(escalao.getName());
+            for (Treinador treinador:escalao.getTreinadores()) {
+                atletaProfileDTO.addTreinador(treinador.getName());
+            }
+        }
+        atletaProfileDTO.setName(atleta.getName());
+        atletaProfileDTO.setEmail(atleta.getEmail());
+        atletaProfileDTO.setIdSocio(atleta.getIdSocio());
+        atletaProfileDTO.setUsername(atleta.getUsername());
+        return  atletaProfileDTO;
+    }
+
+    TreinadorProfileDTO toTreinadorDTOConEscalaos(Treinador treinador){
+        TreinadorProfileDTO treinadorProfileDTO = new TreinadorProfileDTO();
+        //atletaProfileDTO.setEscaloes(atleta.getEscaloes());
+        for (Escalao escalao:treinador.getEscaloes()) {
+            //EscalaoDTO escalaoDTO= new EscalaoDTO(escalao.getName());
+            treinadorProfileDTO.addModalidade(escalao.getModalidade().getNome());
+            treinadorProfileDTO.addEscalao(escalao.getName());
+            for (Atleta atleta:escalao.getAtletas()) {
+                treinadorProfileDTO.addAtletas(atleta.getName());
+            }
+        }
+        treinadorProfileDTO.setName(treinador.getName());
+        treinadorProfileDTO.setEmail(treinador.getEmail());
+        treinadorProfileDTO.setIdSocio(treinador.getIdSocio());
+        treinadorProfileDTO.setUsername(treinador.getUsername());
+        return  treinadorProfileDTO;
+    }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/users/”
@@ -62,12 +92,12 @@ public class UserController {
 
     @POST
     @Path("/")
-    public Response createNewSocio(SocioDTO socioDTO) throws MyEntityExistsException {
+    public Response createNewSocio(SocioCreateDTO socioCreateDTO) throws MyEntityExistsException {
         socioBean.create(
-                socioDTO.getUsername(),
-                socioDTO.getPassword(),
-                socioDTO.getName(),
-                socioDTO.getEmail());
+                socioCreateDTO.getUsername(),
+                socioCreateDTO.getPassword(),
+                socioCreateDTO.getName(),
+                socioCreateDTO.getEmail());
 
         return Response.status(Response.Status.CREATED).build();
     }
@@ -94,13 +124,41 @@ public class UserController {
         return  Response.status(Response.Status.EXPECTATION_FAILED).build();
 
     }
+
+    @GET
+    @Path("/{username}")
+    public Response getSocioDetails(@PathParam("username") String username) {
+        Socio socio = socioBean.findSocio(username);
+
+        if(socio != null){
+        return Response.status(Response.Status.OK).entity(toDTO(socio)).build();
+        }
+        return  Response.status(Response.Status.EXPECTATION_FAILED).build();
+    }
+
+    //LOGIN
+
+    @POST
+    @Path("/login")
+    public Response loginSocio(SocioCreateDTO socioCreateDTO) throws MyEntityExistsException {
+        Socio socio = socioBean.findSocio(socioCreateDTO.getUsername());
+        if(socio != null){
+            if(socio.isDelete()){
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            if(socio.getPassword().equals(socioCreateDTO.getPassword())){
+                return Response.status(Response.Status.OK).entity(toDTO(socio)).build();
+            }
+        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
+    }
 //********************Administrador *****************
     // Converts an entity to a DTO class
     AdministradorDTO toDTO(Administrador administrador) {
         return new AdministradorDTO(
                 administrador.getIdSocio(),
                 administrador.getUsername(),
-                administrador.getPassword(),
                 administrador.getName(),
                 administrador.getEmail()
         );
@@ -120,7 +178,7 @@ public class UserController {
 
     @POST
     @Path("/administradores")
-    public Response createNewAdministrador(AdministradorDTO administradorDTO) throws MyEntityExistsException {
+    public Response createNewAdministrador(SocioCreateDTO administradorDTO) throws MyEntityExistsException {
         administradorBean.create(
                 administradorDTO.getUsername(),
                 administradorDTO.getPassword(),
@@ -129,7 +187,7 @@ public class UserController {
 
         return Response.status(Response.Status.CREATED).build();
     }
-
+/*
     @GET
     @Path("/administradores/{username}")
     public Response getAdministradorDetails(@PathParam("username") String username) {
@@ -137,7 +195,7 @@ public class UserController {
 
         return Response.status(Response.Status.OK).entity(toDTO(administrador)).build();
     }
-
+*/
     /*@PUT
     @Path("/administradores/{username}")
     public Response updateAdministrador(@PathParam("username") String username,AdministradorDTO administradorDTO) throws MyEntityExistsException, MyEntityNotFoundException {
@@ -166,7 +224,6 @@ public class UserController {
         return new AtletaDTO(
                 atleta.getIdSocio(),
                 atleta.getUsername(),
-                atleta.getPassword(),
                 atleta.getName(),
                 atleta.getEmail()
         );
@@ -185,7 +242,7 @@ public class UserController {
 
     @POST
     @Path("/atletas")
-    public Response createNewAtleta(AtletaDTO atletaDTO) throws MyEntityExistsException {
+    public Response createNewAtleta(SocioCreateDTO atletaDTO) throws MyEntityExistsException {
         atletaBean.create(
                 atletaDTO.getUsername(),
                 atletaDTO.getPassword(),
@@ -199,9 +256,9 @@ public class UserController {
     @Path("/atletas/{username}")
     public Response getAtletasDetails(@PathParam("username") String username) {
         Atleta atleta = atletaBean.findAtleta(username);
-
-        return Response.status(Response.Status.OK).entity(toDTO(atleta)).build();
+        return Response.status(Response.Status.OK).entity(toAtletaDTOConEscalaos(atleta)).build();
     }
+
    /* @PUT
     @Path("/atletas/{username}")
     public Response updateAtletas(@PathParam("username") String username,AtletaDTO atletaDTO) throws MyEntityExistsException, MyEntityNotFoundException {
@@ -230,7 +287,6 @@ public class UserController {
         return new TreinadorDTO(
                 treinador.getIdSocio(),
                 treinador.getUsername(),
-                treinador.getPassword(),
                 treinador.getName(),
                 treinador.getEmail()
         );
@@ -249,7 +305,7 @@ public class UserController {
 
     @POST
     @Path("/treinadores")
-    public Response createNewTreinador(TreinadorDTO treinadorDTO) throws MyEntityExistsException {
+    public Response createNewTreinador(SocioCreateDTO treinadorDTO) throws MyEntityExistsException {
         treinadorBean.create(
                 treinadorDTO.getUsername(),
                 treinadorDTO.getPassword(),
@@ -261,11 +317,19 @@ public class UserController {
 
     @GET
     @Path("/treinadores/{username}")
+    public Response getTreinadorDetails(@PathParam("username") String username) {
+        Treinador treinador = treinadorBean.findTreinador(username);
+        return Response.status(Response.Status.OK).entity(toTreinadorDTOConEscalaos(treinador)).build();
+    }
+
+/*
+    @GET
+    @Path("/treinadores/{username}")
     public Response getTreinadoresDetails(@PathParam("username") String username) {
         Treinador treinador = treinadorBean.findTreinador(username);
 
         return Response.status(Response.Status.OK).entity(toDTO(treinador)).build();
-    }
+    }*/
 
   /*  @PUT
     @Path("/treinadores/{username}")

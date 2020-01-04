@@ -1,0 +1,5 @@
+package entities;
+
+public enum TipoDia {
+    SEGUNDA_FEIRA,TERCA_FEIRA,QUARTA_FEIRA,QUINTA_FEIRA,SEXTA_FEIRA
+}

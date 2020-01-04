@@ -125,341 +125,341 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        headers: [
-          { text: "Código", value: "code" },
-          { text: "Descrição", value: "description" },
-          { text: "Tipo", value: "type" },
-          { text: "Valor (€)", value: "value" },
-          { text: "Ações", value: "action" }
-        ],
-        products: [],
-        loading: true,
-        loadingCreate: false,
-        search: "",
-        dialog: false,
-        title: "Criar Produto",
-        editing: false,
-        alertSuccess: false,
-        alertError: false,
-        create: {
-          code: "",
-          description: "",
-          type: "",
-          value: ""
-        },
-        rules: {
-          required: value => !!value || "Preenchimento Obrigatório"
-        }
-      };
+export default {
+  data() {
+    return {
+      headers: [
+        { text: "Código", value: "code" },
+        { text: "Descrição", value: "description" },
+        { text: "Tipo", value: "type" },
+        { text: "Valor (€)", value: "value" },
+        { text: "Ações", value: "action" }
+      ],
+      products: [],
+      loading: true,
+      loadingCreate: false,
+      search: "",
+      dialog: false,
+      title: "Criar Produto",
+      editing: false,
+      alertSuccess: false,
+      alertError: false,
+      create: {
+        code: "",
+        description: "",
+        type: "",
+        value: ""
+      },
+      rules: {
+        required: value => !!value || "Preenchimento Obrigatório"
+      }
+    };
+  },
+  methods: {
+    createProduct() {
+      this.loadingCreate = true;
+
+      if (this.editing) {
+        this.updateProduct();
+
+        return;
+      }
+
+      let type = "";
+
+      switch (this.create.type) {
+        case "Artigo":
+          type = "ARTIGO";
+          break;
+        case "Seguro":
+          type = "SEGURO";
+          break;
+        case "Graduação":
+          type = "GRADUACAO";
+          break;
+        case "Inscrição":
+          type = "INSCRICAO";
+          break;
+        case "Quota":
+          type = "QUOTA";
+          break;
+        case "Aula":
+          type = "AULA";
+          break;
+        case "Estágio":
+          type = "ESTAGIO";
+          break;
+        case "Outro":
+          type = "OUTRO";
+          break;
+      }
+
+      this.$axios
+        .post("/api/products", {
+          code: parseInt(this.create.code),
+          value: parseFloat(this.create.value),
+          description: this.create.description,
+          type: type
+        })
+        .then(response => {
+          if (response.status != 201) {
+            this.loadingCreate = false;
+            this.closeDialog();
+            this.alertError = true;
+          }
+
+          this.loadingCreate = false;
+          this.closeDialog();
+          this.alertSuccess = true;
+          this.getProducts();
+        })
+        .catch(er => {
+          this.loadingCreate = false;
+          this.closeDialog();
+          this.alertError = true;
+          console.log(er);
+        });
     },
-    methods: {
-      createProduct() {
-        this.loadingCreate = true;
+    updateProduct() {
+      let type = "";
 
-        if (this.editing) {
-          this.updateProduct();
+      switch (this.create.type) {
+        case "Artigo":
+          type = "ARTIGO";
+          break;
+        case "Seguro":
+          type = "SEGURO";
+          break;
+        case "Graduação":
+          type = "GRADUACAO";
+          break;
+        case "Inscrição":
+          type = "INSCRICAO";
+          break;
+        case "Quota":
+          type = "QUOTA";
+          break;
+        case "Aula":
+          type = "AULA";
+          break;
+        case "Estágio":
+          type = "ESTAGIO";
+          break;
+        case "Outro":
+          type = "OUTRO";
+          break;
+      }
 
-          return;
-        }
+      this.$axios
+        .put("/api/products/" + this.create.code, {
+          code: parseInt(this.create.code),
+          value: parseFloat(this.create.value),
+          description: this.create.description,
+          type: type
+        })
+        .then(() => {
+          this.loadingCreate = false;
+          this.closeDialog();
+          this.alertSuccess = true;
+          this.getProducts();
+        })
+        .catch(er => {
+          this.loadingCreate = false;
+          this.closeDialog();
+          this.alertError = true;
+          console.log(er);
+        });
+    },
+    deleteProduct(item) {
+      this.$axios
+        .delete("/api/products/" + item.code + "/delete")
+        .then(response => {
+          this.alertSuccess = true;
+          this.getProducts();
+        })
+        .catch(er => {
+          this.alertError = true;
+          console.log(er);
+        });
+    },
+    viewProduct(item) {
+      this.title = `Produto ${item.code}`;
+      this.editing = true;
+      this.dialog = true;
 
-        let type = "";
+      this.getProduct(item.code);
+    },
+    getProduct(code) {
+      this.loadingCreate = true;
 
-        switch (this.create.type) {
-          case "Artigo":
-            type = "ARTIGO";
-            break;
-          case "Seguro":
-            type = "SEGURO";
-            break;
-          case "Graduação":
-            type = "GRADUACAO";
-            break;
-          case "Inscrição":
-            type = "INSCRICAO";
-            break;
-          case "Quota":
-            type = "QUOTA";
-            break;
-          case "Aula":
-            type = "AULA";
-            break;
-          case "Estágio":
-            type = "ESTAGIO";
-            break;
-          case "Outro":
-            type = "OUTRO";
-            break;
-        }
+      this.$axios
+        .get("/api/products/" + code + "/details")
+        .then(response => {
+          let data = response.data;
 
-        this.$axios
-          .post("/api/products", {
-            code: parseInt(this.create.code),
-            value: parseFloat(this.create.value),
-            description: this.create.description,
-            type: type
-          })
-          .then(response => {
-            if (response.status != 201) {
-              this.loadingCreate = false;
-              this.closeDialog();
-              this.alertError = true;
-            }
+          this.create.code = data.code;
+          this.create.description = data.description;
+          this.create.value = data.value;
 
-            this.loadingCreate = false;
-            this.closeDialog();
-            this.alertSuccess = true;
-            this.getProducts();
-          })
-          .catch(er => {
-            this.loadingCreate = false;
-            this.closeDialog();
-            this.alertError = true;
-            console.log(er);
-          });
-      },
-      updateProduct() {
-        let type = "";
+          switch (data.type) {
+            case "ARTIGO":
+              this.create.type = "Artigo";
+              break;
+            case "SEGURO":
+              this.create.type = "Seguro";
+              break;
+            case "GRADUACAO":
+              this.create.type = "Graduação";
+              break;
+            case "INSCRICAO":
+              this.create.type = "Inscrição";
+              break;
+            case "QUOTA":
+              this.create.type = "Quota";
+              break;
+            case "AULA":
+              this.create.type = "Aula";
+              break;
+            case "ESTAGIO":
+              this.create.type = "Estágio";
+              break;
+            case "OUTRO":
+              this.create.type = "Outro";
+              break;
+          }
 
-        switch (this.create.type) {
-          case "Artigo":
-            type = "ARTIGO";
-            break;
-          case "Seguro":
-            type = "SEGURO";
-            break;
-          case "Graduação":
-            type = "GRADUACAO";
-            break;
-          case "Inscrição":
-            type = "INSCRICAO";
-            break;
-          case "Quota":
-            type = "QUOTA";
-            break;
-          case "Aula":
-            type = "AULA";
-            break;
-          case "Estágio":
-            type = "ESTAGIO";
-            break;
-          case "Outro":
-            type = "OUTRO";
-            break;
-        }
+          this.loadingCreate = false;
+        })
+        .catch(er => {
+          this.loadingCreate = false;
+          this.closeDialog();
+          this.alertError = true;
+          console.log(er);
+        });
+    },
+    getProducts() {
+      this.loading = true;
+      this.products = [];
 
-        this.$axios
-          .put("/api/products/" + this.create.code, {
-            code: parseInt(this.create.code),
-            value: parseFloat(this.create.value),
-            description: this.create.description,
-            type: type
-          })
-          .then(() => {
-            this.loadingCreate = false;
-            this.closeDialog();
-            this.alertSuccess = true;
-            this.getProducts();
-          })
-          .catch(er => {
-            this.loadingCreate = false;
-            this.closeDialog();
-            this.alertError = true;
-            console.log(er);
-          });
-      },
-      deleteProduct(item) {
-        this.$axios
-          .delete("/api/products/" + item.code + "/delete")
-          .then(response => {
-            this.alertSuccess = true;
-            this.getProducts();
-          })
-          .catch(er => {
-            this.alertError = true;
-            console.log(er);
-          });
-      },
-      viewProduct(item) {
-        this.title = `Produto ${item.code}`;
-        this.editing = true;
-        this.dialog = true;
-
-        this.getProduct(item.code);
-      },
-      getProduct(code) {
-        this.loadingCreate = true;
-
-        this.$axios
-          .get("/api/products/" + code + "/details")
-          .then(response => {
-            let data = response.data;
-
-            this.create.code = data.code;
-            this.create.description = data.description;
-            this.create.value = data.value;
-
-            switch (data.type) {
+      this.$axios
+        .get("/api/products")
+        .then(response => {
+          response.data.forEach(p => {
+            switch (p.type) {
               case "ARTIGO":
-                this.create.type = "Artigo";
+                p.type = "Artigo";
                 break;
               case "SEGURO":
-                this.create.type = "Seguro";
+                p.type = "Seguro";
                 break;
               case "GRADUACAO":
-                this.create.type = "Graduação";
+                p.type = "Graduação";
                 break;
               case "INSCRICAO":
-                this.create.type = "Inscrição";
+                p.type = "Inscrição";
                 break;
               case "QUOTA":
-                this.create.type = "Quota";
+                p.type = "Quota";
                 break;
               case "AULA":
-                this.create.type = "Aula";
+                p.type = "Aula";
                 break;
               case "ESTAGIO":
-                this.create.type = "Estágio";
+                p.type = "Estágio";
                 break;
               case "OUTRO":
-                this.create.type = "Outro";
+                p.type = "Outro";
                 break;
             }
-
-            this.loadingCreate = false;
-          })
-          .catch(er => {
-            this.loadingCreate = false;
-            this.closeDialog();
-            this.alertError = true;
-            console.log(er);
           });
-      },
-      getProducts() {
-        this.loading = true;
-        this.products = [];
 
-        this.$axios
-          .get("/api/products")
-          .then(response => {
-            response.data.forEach(p => {
-              switch (p.type) {
-                case "ARTIGO":
-                  p.type = "Artigo";
-                  break;
-                case "SEGURO":
-                  p.type = "Seguro";
-                  break;
-                case "GRADUACAO":
-                  p.type = "Graduação";
-                  break;
-                case "INSCRICAO":
-                  p.type = "Inscrição";
-                  break;
-                case "QUOTA":
-                  p.type = "Quota";
-                  break;
-                case "AULA":
-                  p.type = "Aula";
-                  break;
-                case "ESTAGIO":
-                  p.type = "Estágio";
-                  break;
-                case "OUTRO":
-                  p.type = "Outro";
-                  break;
-              }
-            });
-
-            this.products = response.data;
-            this.loading = false;
-          })
-          .catch(er => {
-            this.loading = false;
-            this.alertError = true;
-            console.log(er);
-          });
-      },
-      closeDialog() {
-        this.dialog = false;
-        this.title = "Criar Produto";
-        this.editing = false;
-
-        this.create = {
-          code: "",
-          description: "",
-          type: "",
-          value: ""
-        };
-      },
-      isCodeValid() {
-        return this.create.code.length !== 0;
-      },
-      isDescriptionValid() {
-        return this.create.description.length !== 0;
-      },
-      isTypeValid() {
-        if (this.create.type.length === 0) {
-          return false;
-        }
-
-        switch (this.create.type) {
-          case "Artigo":
-            break;
-          case "Seguro":
-            break;
-          case "Graduação":
-            break;
-          case "Inscrição":
-            break;
-          case "Quota":
-            break;
-          case "Aula":
-            break;
-          case "Estágio":
-            break;
-          case "Outro":
-            break;
-          default:
-            return false;
-        }
-
-        return true;
-      },
-      isValueValid() {
-        return this.create.value.length !== 0;
-      }
+          this.products = response.data;
+          this.loading = false;
+        })
+        .catch(er => {
+          this.loading = false;
+          this.alertError = true;
+          console.log(er);
+        });
     },
-    computed: {
-      isFormValid() {
-        if (!this.isCodeValid()) {
-          //console.log("code error");
-          return false;
-        }
+    closeDialog() {
+      this.dialog = false;
+      this.title = "Criar Produto";
+      this.editing = false;
 
-        if (!this.isDescriptionValid()) {
-          //console.log("description error");
-          return false;
-        }
-
-        if (!this.isTypeValid()) {
-          //console.log("type error");
-          return false;
-        }
-
-        if (!this.isValueValid()) {
-          //console.log("value error");
-          return false;
-        }
-
-        //console.log("valid form");
-        return true;
-      }
+      this.create = {
+        code: "",
+        description: "",
+        type: "",
+        value: ""
+      };
     },
-    mounted() {
-      this.getProducts();
+    isCodeValid() {
+      return this.create.code.length !== 0;
+    },
+    isDescriptionValid() {
+      return this.create.description.length !== 0;
+    },
+    isTypeValid() {
+      if (this.create.type.length === 0) {
+        return false;
+      }
+
+      switch (this.create.type) {
+        case "Artigo":
+          break;
+        case "Seguro":
+          break;
+        case "Graduação":
+          break;
+        case "Inscrição":
+          break;
+        case "Quota":
+          break;
+        case "Aula":
+          break;
+        case "Estágio":
+          break;
+        case "Outro":
+          break;
+        default:
+          return false;
+      }
+
+      return true;
+    },
+    isValueValid() {
+      return this.create.value.length !== 0;
     }
-  };
+  },
+  computed: {
+    isFormValid() {
+      if (!this.isCodeValid()) {
+        //console.log("code error");
+        return false;
+      }
+
+      if (!this.isDescriptionValid()) {
+        //console.log("description error");
+        return false;
+      }
+
+      if (!this.isTypeValid()) {
+        //console.log("type error");
+        return false;
+      }
+
+      if (!this.isValueValid()) {
+        //console.log("value error");
+        return false;
+      }
+
+      //console.log("valid form");
+      return true;
+    }
+  },
+  mounted() {
+    this.getProducts();
+  }
+};
 </script>
