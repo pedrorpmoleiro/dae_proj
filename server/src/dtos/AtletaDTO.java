@@ -1,5 +1,6 @@
 package dtos;
 
+import entities.Escalao;
 import entities.Treinador;
 
 import javax.persistence.Id;
@@ -11,12 +12,13 @@ public class AtletaDTO {
     private long idSocio;
     private String name;
     private String email;
-    private Set<Treinador> treinadores;
+    //private Set<Treinador> treinadores;
     @Id
     private String username;
+    private Set<Escalao> escaloes;
 
     public AtletaDTO() {
-        this.treinadores = new LinkedHashSet<Treinador>();
+        //this.treinadores = new LinkedHashSet<Treinador>();
     }
 
     public AtletaDTO(long idSocio, String username, String name, String email) {
@@ -24,7 +26,24 @@ public class AtletaDTO {
         this.username = username;
         this.name = name;
         this.email = email;
-        this.treinadores = new LinkedHashSet<Treinador>();
+        this.escaloes = new LinkedHashSet<Escalao>();
+        //this.treinadores = new LinkedHashSet<Treinador>();
+    }
+    public AtletaDTO(long idSocio, String username, String name, String email,LinkedHashSet<Escalao> escaloes) {
+        this.idSocio = idSocio;
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.escaloes = escaloes;
+        //this.treinadores = new LinkedHashSet<Treinador>();
+    }
+
+    public Set<Escalao> getEscaloes() {
+        return escaloes;
+    }
+
+    public void setEscaloes(Set<Escalao> escaloes) {
+        this.escaloes = escaloes;
     }
 
     public String getUsername() {
@@ -59,11 +78,11 @@ public class AtletaDTO {
         this.email = email;
     }
 
-    public Set<Treinador> getTreinadores() {
+  /*  public Set<Treinador> getTreinadores() {
         return treinadores;
     }
 
     public void setTreinadores(Set<Treinador> treinadores) {
         this.treinadores = treinadores;
-    }
+    }*/
 }

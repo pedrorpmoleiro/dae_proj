@@ -86,6 +86,9 @@ public class ConfigBean {
             productBean.create(2, ProductType.ARTIGO, "123", 124.0);
             productBean.create(3, ProductType.INSCRICAO, "123", 424.0);
 
+            modalidadeBean.enrollAtletaEscalao("SUB20","mario","2018-2019","BASQUETBALL");
+            modalidadeBean.enrollTreinadorEscalao("SUB20","lucho","2018-2019","BASQUETBALL");
+
             // PAYMENTS
             paymentBean.create(1, "lucho", 1, Instant.now().getEpochSecond(), 2, 200.0,
                     PaymentStatus.PAID, "RECEIPT");
